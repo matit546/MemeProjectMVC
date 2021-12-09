@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@if (User.IsInRole(ST.AdminRole))
+{
+    <p>Admin</p>
+}
+@if (User.IsInRole(ST.UserRole))
+{
+    <p>Uzytkownik</p>
+}
+<div class="text-center">
+    <div class="text-left">
+        <div class="">
+            <CreateMeme />
+        </div>
+    </div>
+   @* <button @onclick="@Toggle">Show me the memes!</button>
+    <button @onclick="@ToggleHelp">Zmiana</button>*@
+@*    @foreach(Meme meme in memes)
+    {
+    <div class="center shadow-full">
+        <div class="memecontainer">
+            <div class="rounded item">
+                <div class="memetitle"> @meme.Title </div>
+                <div class="Autor"> @meme.IdUser </div>
+                <a href="/Meme/@meme.IdMeme">
+                    @{string imagesrc = "data:image/png;base64," + meme.File; }
+                    <img src="@imagesrc" class="imgmiddle" alt="@meme.DescriptionAlt">
+                </a>
+                <row class="buttons">
+                    <button class="transbutton">
+                        <img src="/images/heartEmpty.png" alt="Dodaj do ulubionych">
+                    </button>
+                    <button class="transbutton">
+                        <img src="/images/like.png" alt="Polub">
+                    </button>
+                </row>
+            </div>
+        </div>
+    </div>
+    }*@
+    <div class="center shadow-full">
+        <div class="memecontainer">
+            <div class="rounded item">
+                <div class="memetitle"> Meme2 to fejk </div>
+                <a href="https://steamuserimages-a.akamaihd.net/ugc/790877697703414905/12179089EE7B006B760D0200A13EA11BE61FD07B/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"><img src="/images/BGIxtDN6ihbuxkBBy97Am2CKkKJqFfSh.jpg" class="imgmiddle" alt="Logo Image"></a>
+                <row class="buttons">
+                    <button class="transbutton">
+                        <img src="/images/heartEmpty.png" alt="Dodaj do ulubionych">
+                    </button>
+                    <button class="transbutton">
+                        <img src="/images/like.png" alt="Polub">
+                    </button>
+                </row>
+            </div>
+        </div>
+    </div>
+</div>

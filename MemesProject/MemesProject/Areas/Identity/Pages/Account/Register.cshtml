@@ -1,0 +1,110 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Tworzenie nowego konta";
+}
+
+
+<div class="justify-content-center text-center ">
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+        <h3>Zarejestruj się</h3>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <label asp-for="Input.Email" class="offset-2 col-sm-2 col-form-label text-left"></label>
+            <div class="col-4">
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+        </div>
+          <br />
+        <div class="form-group row">
+            <label asp-for="Input.Password" class="offset-2 col-sm-2 col-form-label text-left"></label>
+            <div class="col-4">
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+        </div>
+          <br />
+        <div class="form-group row">
+            <label asp-for="Input.ConfirmPassword" class="offset-2 col-sm-2 col-form-label text-left"></label>
+            <div class="col-4">
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row align-items-center">
+            <div class="col-2">
+                <img style="vertical-align: middle;width:120px;height:120px;border-radius:50%" id="image" class="rounded-circle img-thumbnail avatar" src="~/Images/defaultImage.jpg" alt="Domyślne zdjęcie profilowe użytkownika" />
+            </div>
+            <label asp-for="Input.AvatarImage" class="col-sm-2 col-form-label text-left"></label>
+            <div class="col-4">
+                <div class="custom-file">
+                    <input title="Wybierz zdjęcie" asp-for="Input.AvatarImage" class="custom-file-input form-control" id="customFile" />
+                    <label class="custom-file-label text-left">Kliknij aby zmienić zdjęcie</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+    </form>
+</div>
+@*<div class="col-md-6 col-md-offset-2">
+            <section>
+                <h4>Use another service to register.</h4>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>*@
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#image').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#customFile").change(function () {
+            readURL(this);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}
