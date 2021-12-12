@@ -137,3 +137,14 @@ body {
     height: 50px;
     border-radius: 50%;
 }
+
+.avatar-Info-Page {
+    vertical-align: middle;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin-left: 15px;
+    margin-right: 0px;
+   
+}

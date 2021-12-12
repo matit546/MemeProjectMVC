@@ -85,6 +85,10 @@ namespace MemesProject.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+            [Required]
+            [StringLength(100, MinimumLength = 6)]
+            [Display(Name = "Username")]
+            public string Username { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -150,6 +154,8 @@ namespace MemesProject.Areas.Identity.Pages.Account
                         user.AvatarImage = data.ToArray();
                     }
                 }
+                user.Account_Register_Date = DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString();
+                user.RealUserName = Input.Username;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

@@ -9,6 +9,10 @@
 {
     <p>Uzytkownik</p>
 }
+@if (User.Identity.IsAuthenticated)
+{
+  <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetUserInformation" asp-route-id="@User.Identity.Name">@User.Identity.Name</a>
+}
 <div class="text-center">
     <div class="text-left">
         <div class="">

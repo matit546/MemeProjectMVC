@@ -62,12 +62,14 @@ namespace MemesProject.Data
             _userManager.CreateAsync(new ApplicationUser
             {
                 UserName = "admin@gmail.com",
+                RealUserName="Administrator",
                 Email = "admin@gmail.com",
                 EmailConfirmed = true,
                 NormalizedUserName = "Administrator",
                 PhoneNumber = "987654321",
-                AvatarImage = data.ToArray()
-            }, "Haslo1!").GetAwaiter().GetResult();
+                AvatarImage = data.ToArray(),
+                Account_Register_Date = DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString()
+        }, "Haslo1!").GetAwaiter().GetResult();
 
             ApplicationUser user = (ApplicationUser)await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin@gmail.com");
             await _userManager.AddToRoleAsync(user, ST.AdminRole);
