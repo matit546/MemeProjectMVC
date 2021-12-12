@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MemesProject.Controllers
 {
-    [Authorize]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +21,7 @@ namespace MemesProject.Controllers
         public async Task<IActionResult> GetUserInformation(string id)
         {
             var applicationUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == id.ToLower());
+            //var applicationUser = _context.Users.FirstOrDefault(x => x.RealUserName.ToLower() == id.ToLower());  uzyc gdy sie przesyla RealUserName
             if (applicationUser == null) 
             {
                 return NotFound();
