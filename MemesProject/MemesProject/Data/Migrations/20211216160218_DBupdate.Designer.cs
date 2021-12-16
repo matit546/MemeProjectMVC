@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MemesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211212141037_UserAccountRegisterDate")]
-    partial class UserAccountRegisterDate
+    [Migration("20211216160218_DBupdate")]
+    partial class DBupdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,16 +32,16 @@ namespace MemesProject.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Account_Register_Date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("AvatarImage")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Data_Zalozenia_Konta")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -73,6 +73,10 @@ namespace MemesProject.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RealUserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -133,9 +137,9 @@ namespace MemesProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("File")
+                    b.Property<byte[]>("File")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<long>("IdCategory")
                         .HasColumnType("bigint");

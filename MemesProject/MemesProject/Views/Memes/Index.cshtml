@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<MemesProject.Models.Meme>
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -58,7 +58,11 @@
                 @Html.DisplayFor(modelItem => item.DescriptionAlt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.File)
+                    @{
+                        string base64 = Convert.ToBase64String(item.File);
+                        string imagesrc = "data:image/png;base64," + base64;
+                    }
+                <image src="@imagesrc" style="width:300px;height:500px" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)

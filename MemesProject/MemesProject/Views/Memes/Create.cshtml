@@ -1,4 +1,6 @@
 ﻿@model MemesProject.Models.Meme
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -29,13 +31,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="File" class="control-label"></label>
-                <input asp-for="File" class="form-control" />
-                <span asp-validation-for="File" class="text-danger"></span>
+                <span asp-validation-for="File" class="text-danger"></span> <br />
+                <img ID="impPrev" class="img-fluid rounded" src="~/images/DodajZdjecie.png" />
             </div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
             </div>
             <div class="form-group">
                 <label asp-for="Likes" class="control-label"></label>
@@ -55,11 +55,6 @@
             <div class="form-group">
                 <label asp-for="IdCategory" class="control-label"></label>
                 <select asp-for="IdCategory" class ="form-control" asp-items="ViewBag.IdCategory"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdUser" class="control-label"></label>
-                <input asp-for="IdUser" class="form-control" />
-                <span asp-validation-for="IdUser" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

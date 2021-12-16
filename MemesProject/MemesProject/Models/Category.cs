@@ -11,6 +11,6 @@ namespace MemesProject.Models
         [Key]
         public long IdCategory { get; set; }
         public string CategoryName { get; set; }
-        public Meme Meme { get; set; }
+        public virtual Meme Meme { get; set; }
     }
 }

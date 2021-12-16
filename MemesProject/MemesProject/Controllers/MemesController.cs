@@ -7,16 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MemesProject.Data;
 using MemesProject.Models;
+using MemesProject.Helpers;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MemesProject.Controllers
 {
     public class MemesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MemesController(ApplicationDbContext context)
+        public MemesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Memes
@@ -46,30 +52,41 @@ namespace MemesProject.Controllers
         }
 
         // GET: Memes/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "IdCategory");
+            
+            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "CategoryName");
             return View();
         }
 
         // POST: Memes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,Likes,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme)
+        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,Likes,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme, IFormFile file)
         {
-            if (ModelState.IsValid)
-            {
+            //var userName = User.FindFirstValue(ClaimTypes.Name);
+            var user = await _userManager.GetUserAsync(User);
+            meme.IdUser = user.RealUserName;
+
+            meme.File = ImageChanger.ImageToBytes(file);
+
+            meme.Date = DateTime.Now;
+            //if (ModelState.IsValid)
+            //{
                 _context.Add(meme);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "IdCategory", meme.IdCategory);
+            //}
+            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "CategoryName", meme.IdCategory);
             return View(meme);
         }
 
         // GET: Memes/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -91,6 +108,7 @@ namespace MemesProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(long id, [Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,Likes,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme)
         {
             if (id != meme.IdMeme)
@@ -123,6 +141,7 @@ namespace MemesProject.Controllers
         }
 
         // GET: Memes/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -142,6 +161,7 @@ namespace MemesProject.Controllers
         }
 
         // POST: Memes/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
