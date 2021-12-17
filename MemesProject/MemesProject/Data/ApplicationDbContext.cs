@@ -15,8 +15,8 @@ namespace MemesProject.Data
         //public DbSet<Comment> Comments { get; set; }
         //public DbSet<CommentActivity> CommentActivities { get; set; }
         //public DbSet<CommentsHub> CommentsHubs { get; set; }
-        //public DbSet<FavoritesMemes> FavoritesMemes { get; set; }
-        //public DbSet<LikedMemes> LikedMemes { get; set; }
+        public DbSet<FavoritesMemes> FavoritesMemes { get; set; }
+        public DbSet<LikedMemes> LikedMemes { get; set; }
         public DbSet<Meme> Memes { get; set; }
         //public DbSet<Observation> Observations { get; set; }
         //public DbSet<Report> Reports { get; set; }
@@ -49,16 +49,18 @@ namespace MemesProject.Data
             //        .WithOne(y => y.Comment)
             //        .OnDelete(DeleteBehavior.ClientSetNull);
             //    });
-            //    builder.Entity<LikedMemes>(entity =>
-            //    {
-            //        entity.HasOne(x => x.Meme)
-            //        .WithOne(y => y.LikedMemes);
-            //    });
-            //    builder.Entity<FavoritesMemes>(entity =>
-            //    {
-            //        entity.HasOne(x => x.Meme)
-            //        .WithOne(y => y.FavoritesMemes);
-            //    });
+            builder.Entity<LikedMemes>(entity =>
+            {
+                entity.HasOne(x => x.Meme)
+                .WithMany(y => y.LikedMemes)
+               .HasForeignKey(z=> z.IdMeme);
+            });
+            builder.Entity<FavoritesMemes>(entity =>
+            {
+                entity.HasOne(x => x.Meme)
+                 .WithMany(y => y.FavoritesMemes)
+                .HasForeignKey(z => z.IdMeme);
+            });
             //    builder.Entity<Observation>(entity =>
             //    {
             //        entity.HasOne(x => x.ApplicationUser)

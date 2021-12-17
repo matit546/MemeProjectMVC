@@ -17,13 +17,20 @@ namespace MemesProject.Models
         public byte[] File { get; set; }
         public DateTime Date { get; set; }
         public int Likes { get; set; }
-        //public LikedMemes LikedMemes { get; set; }
-        //public FavoritesMemes FavoritesMemes { get; set; }
         public bool IfBlocked { get; set; }
         public bool IfApproved { get; set; }
-        //public ApplicationUser ApplicationUser { get; set; }
         public string IdUser { get; set; }
         public virtual Category CategoryEntity { get; set; }
         public long IdCategory { get; set; }
+        public ICollection< FavoritesMemes> FavoritesMemes { get; set; }
+        public ICollection<LikedMemes>  LikedMemes { get; set; }
+
+
+        [NotMapped]
+        public bool IsLiked { get; set; }
+        [NotMapped]
+        public bool IsFavourited { get; set; }
+
+
     }
 }

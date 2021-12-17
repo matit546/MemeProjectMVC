@@ -20,8 +20,8 @@ namespace MemesProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserInformation(string id)
         {
-            var applicationUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == id.ToLower());
-            //var applicationUser = _context.Users.FirstOrDefault(x => x.RealUserName.ToLower() == id.ToLower());  uzyc gdy sie przesyla RealUserName
+            //var applicationUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == id.ToLower());
+            var applicationUser = _context.Users.FirstOrDefault(x => x.RealUserName.ToLower() == id.ToLower());  //uzyc gdy sie przesyla RealUserName
             if (applicationUser == null) 
             {
                 return NotFound();

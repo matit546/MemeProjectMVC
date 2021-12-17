@@ -1,5 +1,6 @@
 ﻿using MemesProject.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace MemesProject.ViewComponents
@@ -20,7 +21,7 @@ namespace MemesProject.ViewComponents
 
             if(claim != null)
             {
-                byte[] ImageByte = _db.Users.Where(u => u.Id == claim.Value).Select(selector: u => u.AvatarImage).FirstOrDefault();
+                byte[] ImageByte = await _db.Users.Where(u => u.Id == claim.Value).Select(selector: u => u.AvatarImage).FirstOrDefaultAsync();
                 return View(ImageByte);
             }
 

@@ -22,13 +22,13 @@
               <div class="form-group row align-items-center">
             <div class="col-3">
                                      
-                <img style="vertical-align: middle;width:100px;height:100px;border-radius:50%" id="image" class="rounded-circle img-thumbnail " src="@imgsrc" alt="zdjęcie profilowe użytkownika" />
+                <img style="vertical-align: middle;width:100px;height:100px;border-radius:50%" id="image" class="rounded-circle img-thumbnail " src="@imgsrc" alt="Default User Avatar" />
             </div>
             <label asp-for="Input.AvatarImage" class="col-sm-2 col-form-label text-left"></label>
             <div class="col-7">
                 <div class="custom-file">
-                    <input title="Wybierz zdjęcie" asp-for="Input.AvatarImage" class="custom-file-input form-control" id="customFile" />
-                    <label class="custom-file-label text-left">Kliknij aby zmienić zdjęcie</label>
+                    <input title="Choose Image" asp-for="Input.AvatarImage" class="custom-file-input form-control" id="customFile" />
+                    <label class="custom-file-label text-left">Click to change image</label>
                 </div>
             </div>
         </div>

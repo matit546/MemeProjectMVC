@@ -4,6 +4,7 @@ using MemesProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MemesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211216185649_LikeFavouriteMeme4")]
+    partial class LikeFavouriteMeme4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,7 @@ namespace MemesProject.Data.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("MemesProject.Models.FavoritesMemes", b =>
@@ -135,7 +137,7 @@ namespace MemesProject.Data.Migrations
 
                     b.HasIndex("IdMeme");
 
-                    b.ToTable("FavoritesMemes", (string)null);
+                    b.ToTable("FavoritesMemes");
                 });
 
             modelBuilder.Entity("MemesProject.Models.LikedMemes", b =>
@@ -157,7 +159,7 @@ namespace MemesProject.Data.Migrations
 
                     b.HasIndex("IdMeme");
 
-                    b.ToTable("LikedMemes", (string)null);
+                    b.ToTable("LikedMemes");
                 });
 
             modelBuilder.Entity("MemesProject.Models.Meme", b =>
@@ -208,7 +210,7 @@ namespace MemesProject.Data.Migrations
                     b.HasIndex("IdCategory")
                         .IsUnique();
 
-                    b.ToTable("Memes", (string)null);
+                    b.ToTable("Memes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

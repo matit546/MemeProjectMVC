@@ -28,7 +28,46 @@ namespace MemesProject.Controllers
         // GET: Memes
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                var memes = _context.Memes.Include(m => m.CategoryEntity);
+                return View(await memes.ToListAsync());
+            }
+            var claimsIdendity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+
             var applicationDbContext = _context.Memes.Include(m => m.CategoryEntity);
+            
+            var likeJoinQuery =
+       from meme in _context.Memes
+       join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
+       where likedMeme.IdUser==claim.Value
+       select meme;
+
+            var favouriteJoinQuery =
+      from meme in _context.Memes
+      join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
+      where FavoritesMemes.IdUser == claim.Value
+      select meme;
+
+            await applicationDbContext.ForEachAsync(i =>
+            {
+                if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme)){
+                    i.IsLiked= true;
+                }
+            });
+
+
+            await applicationDbContext.ForEachAsync(i =>
+            {
+                if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                {
+                    i.IsFavourited = true;
+                }
+            });
+
+
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -175,6 +214,78 @@ namespace MemesProject.Controllers
         private bool MemeExists(long id)
         {
             return _context.Memes.Any(e => e.IdMeme == id);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LikeMeme(long? memeId)
+        {
+            if (memeId == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            var claimsIdendity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            var memeLike = _context.LikedMemes.FirstOrDefault(x => x.IdUser == claim.Value && x.IdMeme == memeId);
+            if (memeLike == null)
+            {
+                LikedMemes LikedMeme = new LikedMemes();
+                LikedMeme.IdUser = claim.Value;
+                LikedMeme.IdMeme= (long)memeId;
+                _context.LikedMemes.Add(LikedMeme);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            if(memeLike!=null)
+            {
+                _context.LikedMemes.Remove(memeLike);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> FavouriteMeme(long? memeId)
+        {
+            if (memeId == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            var claimsIdendity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            var memeFavourite = _context.FavoritesMemes.FirstOrDefault(x => x.IdUser == claim.Value && x.IdMeme == memeId);
+            if (memeFavourite == null)
+            {
+                FavoritesMemes favouritedMeme = new FavoritesMemes();
+                favouritedMeme.IdUser = claim.Value;
+                favouritedMeme.IdMeme = (long)memeId;
+                _context.FavoritesMemes.Add(favouritedMeme);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            if (memeFavourite != null)
+            {
+                _context.FavoritesMemes.Remove(memeFavourite);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

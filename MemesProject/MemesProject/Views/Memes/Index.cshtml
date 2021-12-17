@@ -62,7 +62,40 @@
                         string base64 = Convert.ToBase64String(item.File);
                         string imagesrc = "data:image/png;base64," + base64;
                     }
-                <image src="@imagesrc" style="width:300px;height:500px" />
+                    <div class="center shadow-full">
+        <div class="memecontainer">
+            <div class="rounded item">
+                <div class="memetitle"> Meme2 to fejk </div>
+                     <image src="@imagesrc" style="width:300px;height:500px" />
+                <row class="buttons">
+                    <button class="transbutton">
+                   
+                        @if(item.IsLiked)
+                        {
+                              <img src="/images/ww.png" id="@item.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
+                        }
+                        else
+                        {
+                              <img src="/images/heartEmpty.png" id="@item.IdMeme" class="likeImage"  title="Like Image"   alt="Dodaj do ulubionych">
+                        }
+                  
+                    </button>
+                    <button class="transbutton">
+                         @if(item.IsFavourited)
+                                        {
+                                <img src="/images/ww.png" id="@item.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
+                                        }
+                                        else
+                                        {
+                                             <img src="/images/like.png" id="@item.IdMeme" class="favouriteImage" title="Add an image to Favourites"   alt="Polub">
+                        }
+                
+                    </button>
+                </row>
+            </div>
+        </div>
+    </div>
+              
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
@@ -77,7 +110,9 @@
                 @Html.DisplayFor(modelItem => item.IfApproved)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdUser)
+                @Html.ActionLink(item.IdUser,"GetUserInformation","User",new { id = item.IdUser })
+               <h2> <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetUserInformation" asp-route-id="@item.IdUser">@item.IdUser</a></h2>
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryEntity.IdCategory)
@@ -91,3 +126,84 @@
 }
     </tbody>
 </table>
+
+
+    
+
+@section Scripts {
+   <script>
+
+
+      $(document).ready(function(){
+  $(".likeImage, .UnLikeImage").click(function(){
+
+   var $img = $(this);
+   var memeId = $img.attr("id");
+
+         $.ajax({  
+                url: "/Memes/LikeMeme?memeId="+memeId,  
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) {  
+                    if (response != null) {  
+
+
+                if($img.hasClass('likeImage')){
+                        $img.attr('src', '/images/ww.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','UnLike Image');;
+                }else{
+                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Like Image');;;
+                }
+                    } else {  
+                   
+                    }  
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                }  
+            });
+    
+  });
+});
+        
+   </script>
+   <script>
+        $(document).ready(function(){
+  $(".favouriteImage, .UnfavouriteImage").click(function(){
+
+   var $img = $(this);
+   var memeId = $img.attr("id");
+         $.ajax({  
+                url: "/Memes/FavouriteMeme?memeId="+memeId,  
+                type:"GET", 
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) {  
+                    if (response != null) {  
+
+                if($img.hasClass('favouriteImage')){
+                         $img.attr('src', '/images/ww.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                }else{
+                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Add an image to Favourites');;
+                }
+                    } else {  
+                   
+                    }  
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                }  
+            });
+    
+  });
+});
+
+
+   </script>
+}
+

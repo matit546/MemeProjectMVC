@@ -27,13 +27,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                           <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Kategoria</a>
+                       @* @if (User.IsInRole(ST.AdminRole)){*@
+                            <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Category</a>
                         </li>
-                              </li>
-                           <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Memes" asp-action="Index">Add Meme</a>
-                        </li>
+                       
+                        @if (User.IsInRole(ST.UserRole) || User.IsInRole(ST.AdminRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Memes" asp-action="Index">Add Meme</a>
+                            </li>
+                    }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

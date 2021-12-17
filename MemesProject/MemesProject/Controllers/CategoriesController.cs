@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MemesProject.Data;
 using MemesProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MemesProject.Controllers
 {
+    [Authorize(Roles = ST.AdminRole)]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
