@@ -9,85 +9,41 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DescriptionAlt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.File)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Likes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IfBlocked)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IfApproved)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryEntity)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescriptionAlt)
-            </td>
-            <td>
-                    @{
-                        string base64 = Convert.ToBase64String(item.File);
-                        string imagesrc = "data:image/png;base64," + base64;
-                    }
-                    <div class="center shadow-full">
+@foreach(Meme meme in Model)
+    {
+    <div class="center shadow-full">
         <div class="memecontainer">
             <div class="rounded item">
-                <div class="memetitle"> Meme2 to fejk </div>
-                     <image src="@imagesrc" style="width:300px;height:500px" />
+                <div class="memetitle"> @meme.Title </div>
+                <div class="Autor"> @meme.IdUser </div>
+                <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                    @{
+                        string base64 = Convert.ToBase64String(meme.File);
+                        string imagesrc = "data:image/png;base64," + base64; 
+                    }
+                    <img src="@imagesrc" class="imgmiddle" alt="@meme.DescriptionAlt">
+                </a>
                 <row class="buttons">
                     <button class="transbutton">
                    
-                        @if(item.IsLiked)
+                        @if(meme.IsLiked)
                         {
-                              <img src="/images/ww.png" id="@item.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/ww.png" id="@meme.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
                         }
                         else
                         {
-                              <img src="/images/heartEmpty.png" id="@item.IdMeme" class="likeImage"  title="Like Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  title="Like Image"   alt="Dodaj do ulubionych">
                         }
                   
                     </button>
                     <button class="transbutton">
-                         @if(item.IsFavourited)
+                         @if(meme.IsFavourited)
                                         {
-                                <img src="/images/ww.png" id="@item.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
+                                <img src="/images/ww.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
                                         }
                                         else
                                         {
-                                             <img src="/images/like.png" id="@item.IdMeme" class="favouriteImage" title="Add an image to Favourites"   alt="Polub">
+                                             <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" title="Add an image to Favourites"   alt="Polub">
                         }
                 
                     </button>
@@ -95,38 +51,10 @@
             </div>
         </div>
     </div>
-              
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Likes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IfBlocked)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IfApproved)
-            </td>
-            <td>
-                @Html.ActionLink(item.IdUser,"GetUserInformation","User",new { id = item.IdUser })
-               <h2> <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetUserInformation" asp-route-id="@item.IdUser">@item.IdUser</a></h2>
-
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryEntity.IdCategory)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdMeme">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdMeme">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdMeme">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
+    <a asp-action="Edit" asp-route-id="@meme.IdMeme">Edit</a>
+    <a asp-action="Details" asp-route-id="@meme.IdMeme">Details</a>
+    <a asp-action="Delete" asp-route-id="@meme.IdMeme">Delete</a>
+    }
 
     
 

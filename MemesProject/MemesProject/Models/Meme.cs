@@ -24,6 +24,7 @@ namespace MemesProject.Models
         public long IdCategory { get; set; }
         public ICollection< FavoritesMemes> FavoritesMemes { get; set; }
         public ICollection<LikedMemes>  LikedMemes { get; set; }
+        public virtual ICollection<CommentsHub> CommentsHub { get; set; }
 
 
         [NotMapped]

@@ -39,16 +39,16 @@ namespace MemesProject.Controllers
             var applicationDbContext = _context.Memes.Include(m => m.CategoryEntity);
             
             var likeJoinQuery =
-       from meme in _context.Memes
-       join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
-       where likedMeme.IdUser==claim.Value
-       select meme;
+            from meme in _context.Memes
+            join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
+            where likedMeme.IdUser==claim.Value
+            select meme;
 
             var favouriteJoinQuery =
-      from meme in _context.Memes
-      join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
-      where FavoritesMemes.IdUser == claim.Value
-      select meme;
+            from meme in _context.Memes
+            join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
+            where FavoritesMemes.IdUser == claim.Value
+            select meme;
 
             await applicationDbContext.ForEachAsync(i =>
             {

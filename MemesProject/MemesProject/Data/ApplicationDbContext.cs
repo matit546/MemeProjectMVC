@@ -12,9 +12,9 @@ namespace MemesProject.Data
         }
 
         public DbSet<Category> Categories { get; set; }
-        //public DbSet<Comment> Comments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         //public DbSet<CommentActivity> CommentActivities { get; set; }
-        //public DbSet<CommentsHub> CommentsHubs { get; set; }
+        public DbSet<CommentsHub> CommentsHubs { get; set; }
         public DbSet<FavoritesMemes> FavoritesMemes { get; set; }
         public DbSet<LikedMemes> LikedMemes { get; set; }
         public DbSet<Meme> Memes { get; set; }
@@ -26,9 +26,9 @@ namespace MemesProject.Data
 
             builder.Entity<Category>(entity =>
             {
-                entity.HasOne(x => x.Meme)
+                entity.HasMany(x => x.Meme)
                 .WithOne(y => y.CategoryEntity)
-                .HasForeignKey<Meme>(z => z.IdCategory);
+                .HasForeignKey(z => z.IdCategory);
             });
             //builder.Entity<Meme>(entity =>
             //{
@@ -37,18 +37,18 @@ namespace MemesProject.Data
             //    .HasForeignKey(z => z.IdUser)
             //    .IsRequired();
             //});
-            //    builder.Entity<CommentsHub>(entity =>
-            //    {
-            //        entity.HasMany(x => x.Comments)
-            //        .WithOne(y => y.CommentsHub)
-            //        .HasForeignKey(z => z.IdComment);
-            //    });
-            //    builder.Entity<Comment>(entity =>
-            //    {
-            //        entity.HasOne(x => x.CommentActivity)
-            //        .WithOne(y => y.Comment)
-            //        .OnDelete(DeleteBehavior.ClientSetNull);
-            //    });
+            builder.Entity<CommentsHub>(entity =>
+            {
+                entity.HasMany(x => x.Comments)
+                .WithOne(y => y.CommentsHub)
+                .HasForeignKey(z => z.IdCommentsHub);
+            });
+            //builder.Entity<Comment>(entity =>
+            //{
+            //    entity.HasOne(x => x.CommentActivity)
+            //    .WithOne(y => y.Comment)
+            //    .OnDelete(DeleteBehavior.ClientSetNull);
+            //});
             builder.Entity<LikedMemes>(entity =>
             {
                 entity.HasOne(x => x.Meme)
@@ -59,6 +59,12 @@ namespace MemesProject.Data
             {
                 entity.HasOne(x => x.Meme)
                  .WithMany(y => y.FavoritesMemes)
+                .HasForeignKey(z => z.IdMeme);
+            });
+            builder.Entity<CommentsHub>(entity =>
+            {
+                entity.HasOne(x => x.Meme)
+                .WithMany(y => y.CommentsHub)
                 .HasForeignKey(z => z.IdMeme);
             });
             //    builder.Entity<Observation>(entity =>
