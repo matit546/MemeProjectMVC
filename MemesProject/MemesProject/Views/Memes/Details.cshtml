@@ -5,16 +5,13 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Meme</h4>
     <hr />
     <div class="center shadow-full">
         <div class="memecontainer">
             <div class="rounded item">
                 <div class="memetitle"> @Html.DisplayFor(model => model.Title) </div>
-                <div class="Autor"> @Html.DisplayFor(model => model.IdUser) </div>
+                @Html.ActionLink(Model.IdUser,"GetUserInformation","User",new { id = Model.IdUser })
                 @{
                     string base64 = Convert.ToBase64String(Model.File);
                     string imagesrc = "data:image/png;base64," + base64; 
@@ -26,23 +23,23 @@
                    
                         @if(Model.IsLiked)
                         {
-                              <img src="/images/ww.png" id="@Model.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/heart.png" id="@Model.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
                         }
                         else
                         {
                               <img src="/images/heartEmpty.png" id="@Model.IdMeme" class="likeImage"  title="Like Image"   alt="Dodaj do ulubionych">
                         }
-                  
                     </button>
                     <button class="transbutton">
                          @if(Model.IsFavourited)
                                         {
-                                <img src="/images/ww.png" id="@Model.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
+                                <img src="/images/likeFull.png" id="@Model.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
                                         }
                                         else
                                         {
                                  <img src="/images/like.png" id="@Model.IdMeme" class="favouriteImage" title="Add an image to Favourites"   alt="Polub">
                         }
+                                            @Model.Likes
                 
                     </button>
                 </row>
@@ -56,78 +53,6 @@
 </div>
 
 @section Scripts {
-   <script>
 
-
-      $(document).ready(function(){
-  $(".likeImage, .UnLikeImage").click(function(){
-
-   var $img = $(this);
-   var memeId = $img.attr("id");
-
-         $.ajax({  
-                url: "/Memes/LikeMeme?memeId="+memeId,  
-                contentType: "application/json; charset=utf-8",  
-                dataType: "text",  
-                success: function(response) {  
-                    if (response != null) {  
-
-
-                if($img.hasClass('likeImage')){
-                        $img.attr('src', '/images/ww.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','UnLike Image');;
-                }else{
-                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Like Image');;;
-                }
-                    } else {  
-                   
-                    }  
-                },  
-                failure: function(response) {  
-                    
-                },  
-                error: function(response) {  
-            
-                }  
-            });
-    
-  });
-});
-        
-   </script>
-   <script>
-        $(document).ready(function(){
-  $(".favouriteImage, .UnfavouriteImage").click(function(){
-
-   var $img = $(this);
-   var memeId = $img.attr("id");
-         $.ajax({  
-                url: "/Memes/FavouriteMeme?memeId="+memeId,  
-                type:"GET", 
-                contentType: "application/json; charset=utf-8",  
-                dataType: "text",  
-                success: function(response) {  
-                    if (response != null) {  
-
-                if($img.hasClass('favouriteImage')){
-                         $img.attr('src', '/images/ww.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','Remove an image from Favourites');
-                }else{
-                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Add an image to Favourites');;
-                }
-                    } else {  
-                   
-                    }  
-                },  
-                failure: function(response) {  
-                    
-                },  
-                error: function(response) {  
-            
-                }  
-            });
-    
-  });
-});
-
-   </script>
    @{await Html.RenderPartialAsync("_CommentsHubPartial", new CommentViewModel { IdMeme=Model.IdMeme });}
 }

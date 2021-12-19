@@ -14,7 +14,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MemesProject</a>
+                <a class="navbar-brand ChangeColorDiv" asp-area="" asp-controller="Home" asp-action="Index">MemesProject</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -39,6 +39,21 @@
                             </li>
                     }
                     </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <button id="WCAGColorButton">Click!</button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMinButton">A</button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMedButton">A+</button>
+                        </li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMaxButton">A++</button>
+                        </li>
+                    </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -58,6 +73,126 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+
+    $('#WCAGColorButton').click(function(){
+    $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('setblackyelow');
+    });
+
+    $('#WCAGFontSizeMinButton').click(function(){
+    $('h1, a, div, button, ul, li, body, input, nav, select, option').addClass('SetFontSizeMin');
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMed'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMed')
+    }
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMax'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMax')
+    }
+    });
+
+    $('#WCAGFontSizeMedButton').click(function(){
+    $('h1, a, div, button, ul, li, body, input, nav, select, option').addClass('SetFontSizeMed');
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMin'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMin')
+    }
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMax'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMax')
+    }
+    });
+
+    $('#WCAGFontSizeMaxButton').click(function(){
+    $('h1, a, div, button, ul, li, body, input, nav, select, option').addClass('SetFontSizeMax');
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMed'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMed')
+    }
+    if ($('h1, a, div, button, ul, li, body, input, nav, select, option').hasClass('SetFontSizeMin'))
+    {
+       $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('SetFontSizeMin')
+    }
+    });
+
+
+    </script>
+
+       <script>
+
+
+      $(document).ready(function(){
+  $(".likeImage, .UnLikeImage").click(function(){
+
+   var $img = $(this);
+   var memeId = $img.attr("id");
+
+         $.ajax({  
+                url: "/Memes/LikeMeme?memeId="+memeId,  
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) {  
+                    if (response != null) {  
+
+
+                if($img.hasClass('likeImage')){
+                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','UnLike Image');;
+                }else{
+                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Like Image');;;
+                }
+                    } else {  
+                   
+                    }  
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                }  
+            });
+    
+  });
+});
+        
+   </script>
+   <script>
+        $(document).ready(function(){
+  $(".favouriteImage, .UnfavouriteImage").click(function(){
+
+   var $img = $(this);
+   var memeId = $img.attr("id");
+         $.ajax({  
+                url: "/Memes/FavouriteMeme?memeId="+memeId,  
+                type:"GET", 
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) {  
+                    if (response != null) {  
+
+                if($img.hasClass('favouriteImage')){
+                         $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                }else{
+                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Add an image to Favourites');;
+                }
+                    } else {  
+                   
+                    }  
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                }  
+            });
+    
+      });
+    });
+
+
+   </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

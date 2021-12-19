@@ -15,7 +15,7 @@
         <div class="memecontainer">
             <div class="rounded item">
                 <div class="memetitle"> @meme.Title </div>
-                <div class="Autor"> @meme.IdUser </div>
+                @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
                 <a asp-action="Details" asp-route-id="@meme.IdMeme">
                     @{
                         string base64 = Convert.ToBase64String(meme.File);
@@ -28,7 +28,7 @@
                    
                         @if(meme.IsLiked)
                         {
-                              <img src="/images/ww.png" id="@meme.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
                         }
                         else
                         {
@@ -39,7 +39,7 @@
                     <button class="transbutton">
                          @if(meme.IsFavourited)
                                         {
-                                <img src="/images/ww.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
+                                <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
                                         }
                                         else
                                         {
@@ -59,79 +59,6 @@
     
 
 @section Scripts {
-   <script>
 
-
-      $(document).ready(function(){
-  $(".likeImage, .UnLikeImage").click(function(){
-
-   var $img = $(this);
-   var memeId = $img.attr("id");
-
-         $.ajax({  
-                url: "/Memes/LikeMeme?memeId="+memeId,  
-                contentType: "application/json; charset=utf-8",  
-                dataType: "text",  
-                success: function(response) {  
-                    if (response != null) {  
-
-
-                if($img.hasClass('likeImage')){
-                        $img.attr('src', '/images/ww.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','UnLike Image');;
-                }else{
-                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Like Image');;;
-                }
-                    } else {  
-                   
-                    }  
-                },  
-                failure: function(response) {  
-                    
-                },  
-                error: function(response) {  
-            
-                }  
-            });
-    
-  });
-});
-        
-   </script>
-   <script>
-        $(document).ready(function(){
-  $(".favouriteImage, .UnfavouriteImage").click(function(){
-
-   var $img = $(this);
-   var memeId = $img.attr("id");
-         $.ajax({  
-                url: "/Memes/FavouriteMeme?memeId="+memeId,  
-                type:"GET", 
-                contentType: "application/json; charset=utf-8",  
-                dataType: "text",  
-                success: function(response) {  
-                    if (response != null) {  
-
-                if($img.hasClass('favouriteImage')){
-                         $img.attr('src', '/images/ww.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','Remove an image from Favourites');
-                }else{
-                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Add an image to Favourites');;
-                }
-                    } else {  
-                   
-                    }  
-                },  
-                failure: function(response) {  
-                    
-                },  
-                error: function(response) {  
-            
-                }  
-            });
-    
-  });
-});
-
-
-   </script>
 }
 
