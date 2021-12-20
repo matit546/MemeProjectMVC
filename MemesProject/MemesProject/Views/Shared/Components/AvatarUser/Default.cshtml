@@ -1,9 +1,9 @@
-﻿@model Byte[]
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 
      @{
-      var base64 = Convert.ToBase64String(@Model);
-      var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+      var imgsrc = string.Format("data:image/jpg;base64,{0}", @HttpContextAccessor.HttpContext.Session.GetString(ST.SessionImageAvatar));
      }
      <img src="@imgsrc" class="avatar" alt="User Avatar Image" />
        

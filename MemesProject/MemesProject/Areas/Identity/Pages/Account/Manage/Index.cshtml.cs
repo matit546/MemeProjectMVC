@@ -105,9 +105,11 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
             {
                 if (Input.AvatarImage != null)
                 {
+
                     using var stream = new MemoryStream();
                     await Input.AvatarImage.CopyToAsync(stream);
                     user.AvatarImage = stream.ToArray();
+                    HttpContext.Session.Remove(ST.SessionImageAvatar);
                 }
                 user.RealUserName = Username;
                 _db.Users.Update(user);
@@ -122,6 +124,7 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
                 using var stream = new MemoryStream();
                 await Input.AvatarImage.CopyToAsync(stream);
                 user.AvatarImage = stream.ToArray();
+                HttpContext.Session.Remove(ST.SessionImageAvatar);
                 _db.Users.Update(user);
                 await _db.SaveChangesAsync();
                 await _signInManager.RefreshSignInAsync(user);

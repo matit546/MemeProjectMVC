@@ -1,4 +1,6 @@
-﻿namespace MemesProject.Models
+﻿using System.Collections.Generic;
+
+namespace MemesProject.Models
 {
     public class UserInformation
     {
@@ -9,6 +11,8 @@
         public int IloscMemow { get; set; }
 
         public int IloscKomentarzy { get; set; }
+        public bool isObserved { get; set; }
 
+        public IList<ObserverUserInfo> Observers { get; set; }
     }
 }

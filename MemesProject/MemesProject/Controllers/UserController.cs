@@ -1,16 +1,20 @@
 ﻿using MemesProject.Data;
 using MemesProject.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MemesProject.Controllers
 {
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public UserController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index()
         {
@@ -21,11 +25,18 @@ namespace MemesProject.Controllers
         public async Task<IActionResult> GetUserInformation(string id)
         {
             //var applicationUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == id.ToLower());
-            var applicationUser = _context.Users.FirstOrDefault(x => x.RealUserName.ToLower() == id.ToLower());  //uzyc gdy sie przesyla RealUserName
+            var applicationUser = await _context.Users.FirstOrDefaultAsync(x => x.RealUserName.ToLower() == id.ToLower());  //uzyc gdy sie przesyla RealUserName
             if (applicationUser == null) 
             {
-                return NotFound();
+                return NotFound("Uzytkownik o nazwie "+id+" nie istnieje");
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userId = await _userManager.GetUserIdAsync(user);
+            var isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
+
+            var observedUsersinfo = await _context.Observations.Where(x => x.IdUser == applicationUser.Id).ToListAsync();
+    
             UserInformation userInf = new UserInformation
             {
                 Username = applicationUser.RealUserName,
@@ -33,11 +44,99 @@ namespace MemesProject.Controllers
                 AvatarImage = applicationUser.AvatarImage,
                 //      IloscKomentarzy=_context.Comm
                 IloscMemow = _context.Memes.Where(u => u.IdUser == id).Count(),
-                Email = applicationUser.Email
+                Email = applicationUser.Email,
             };
+
+            if (observedUsersinfo.Any())
+            {
+                userInf.Observers = new List<ObserverUserInfo>();
+                foreach (var userDb in observedUsersinfo)
+                {
+                    var userObserverData = await _context.Users.FirstOrDefaultAsync(x => x.Id== userDb.IdObservedUser);
+                    ObserverUserInfo observerUser = new ObserverUserInfo();
+
+                    observerUser.AvatarImage = userObserverData.AvatarImage;
+                    observerUser.Username = userObserverData.RealUserName;
+                  
+                    userInf.Observers.Add(observerUser);
+                }
+            }
+
+            if (isObservedDb != null)
+            {
+                userInf.isObserved = true;
+            }
 
             return View(userInf);
  
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> FollowUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.GetUserAsync(User);
+            var userId = await _userManager.GetUserIdAsync(user);
+          
+            var applicationUser = await _context.Users.FirstOrDefaultAsync(x => x.RealUserName.ToLower() == id.ToLower());
+            if (applicationUser == null)
+            {
+                return NotFound("Uzytkownik o nazwie " + id + " nie istnieje");
+            }
+
+            if (applicationUser.Id == userId)
+            {
+                return BadRequest();
+            }
+           
+            Observation observation = new Observation();
+            observation.IdUser = userId;
+            observation.IdObservedUser = applicationUser.Id;
+            _context.Observations.Add(observation);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("GetUserInformation", new { id = id });
+
+        }
+        
+        [Authorize]
+        public async Task<IActionResult> UnFollowUser(string id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.GetUserAsync(User);
+            var userId = await _userManager.GetUserIdAsync(user);
+
+            var applicationUser = await _context.Users.FirstOrDefaultAsync(x => x.RealUserName.ToLower() == id.ToLower());
+            if (applicationUser == null)
+            {
+                return NotFound("Uzytkownik o nazwie " + id + " nie istnieje");
+            }
+
+            if (applicationUser.Id == userId)
+            {
+                return BadRequest();
+            }
+
+            var observation = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
+            if (observation == null)
+            {
+                return NotFound();
+            }
+
+            _context.Observations.Remove(observation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("GetUserInformation", new { id = id });
+
         }
     }
 }

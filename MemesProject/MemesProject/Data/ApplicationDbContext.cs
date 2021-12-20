@@ -18,7 +18,8 @@ namespace MemesProject.Data
         public DbSet<FavoritesMemes> FavoritesMemes { get; set; }
         public DbSet<LikedMemes> LikedMemes { get; set; }
         public DbSet<Meme> Memes { get; set; }
-        //public DbSet<Observation> Observations { get; set; }
+
+        public DbSet<Observation> Observations { get; set; }
         //public DbSet<Report> Reports { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -67,12 +68,13 @@ namespace MemesProject.Data
                 .WithMany(y => y.CommentsHub)
                 .HasForeignKey(z => z.IdMeme);
             });
-            //    builder.Entity<Observation>(entity =>
-            //    {
-            //        entity.HasOne(x => x.ApplicationUser)
-            //        .WithMany(y => y.Observations)
-            //        .HasForeignKey(z => z.IdObservedUser);
-            //    });
+
+            builder.Entity<Observation>(entity =>
+            {
+                entity.HasOne(x => x.ApplicationUser)
+                .WithMany(y => y.Observations)
+                .HasForeignKey(z => z.IdObservedUser);
+            });
         }
     }
 }

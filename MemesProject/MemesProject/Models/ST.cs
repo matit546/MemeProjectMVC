@@ -14,6 +14,6 @@ namespace MemesProject.Models
         public const string DefaultImage = "defaultImage.jpg";
 
 
-
+        public const string SessionImageAvatar = "SessionImageAvatar";
     }
 }

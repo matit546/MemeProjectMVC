@@ -17,7 +17,21 @@
            
                 <div class="col-sm-2">
                <img src="@imgsrc" class="avatar-Info-Page" alt="User Avatar Image" />
-
+                   @if(User.Identity.IsAuthenticated)
+                     {    
+                         @if ( User.Identity.Name!= @Model.Email)
+                         {
+                            @if (!Model.isObserved)
+                            {
+                                   <a asp-action="FollowUser" asp-route-id="@Model.Username">Follow User</a>
+                            }
+                            else
+                            {
+                               <a asp-action="UnFollowUser" asp-route-id="@Model.Username">Unfollow User</a>
+                            }
+                      
+                         }
+                     }     
                 </div>
            
                 <div class="col-sm-3">
@@ -37,6 +51,16 @@
                 </div>
                    <div class="col-sm-3 border border-dark">
                        Osoby Obserwujące
+                       @if(Model.Observers!=null)
+                       {
+                        @foreach(var obs in Model.Observers)
+                        {
+                                  var base64st = Convert.ToBase64String(@obs.AvatarImage);
+                                  var imgsrcobs = string.Format("data:image/jpg;base64,{0}", base64st);
+                               <img src="@imgsrcobs" class="avatar-Info-Page" alt="User Avatar Image" />
+                               <p>@obs.Username</p>
+                    }
+                }
                    </div>
                 </div>
 
