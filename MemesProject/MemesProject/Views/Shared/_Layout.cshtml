@@ -128,7 +128,7 @@
    var memeId = $img.attr("id");
 
          $.ajax({  
-                url: "/Memes/LikeMeme?memeId="+memeId,  
+                url: "/Memes/FavouriteMeme?memeId="+memeId,  
                 contentType: "application/json; charset=utf-8",  
                 dataType: "text",  
                 success: function(response) {  
@@ -136,9 +136,9 @@
 
 
                 if($img.hasClass('likeImage')){
-                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','UnLike Image');;
+                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');;
                 }else{
-                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Like Image');;;
+                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
                 }
                     } else {  
                    
@@ -163,7 +163,7 @@
    var $img = $(this);
    var memeId = $img.attr("id");
          $.ajax({  
-                url: "/Memes/FavouriteMeme?memeId="+memeId,  
+                url: "/Memes/LikeMeme?memeId="+memeId,  
                 type:"GET", 
                 contentType: "application/json; charset=utf-8",  
                 dataType: "text",  
@@ -171,9 +171,19 @@
                     if (response != null) {  
 
                 if($img.hasClass('favouriteImage')){
-                         $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                         $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                         var $numberofLikes = $("[id='numberLike "+memeId+"']");
+                         var likes = $numberofLikes.text();
+                         let num = parseInt(likes);
+                         num+=1;
+                        $numberofLikes.text(num);
                 }else{
-                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Add an image to Favourites');;
+                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                          var $numberofLikes = $("[id='numberLike "+memeId+"']");
+                         var likes = $numberofLikes.text();
+                         let num = parseInt(likes);
+                         num-=1;
+                        $numberofLikes.text(num);
                 }
                     } else {  
                    

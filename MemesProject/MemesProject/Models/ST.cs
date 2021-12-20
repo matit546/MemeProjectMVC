@@ -12,5 +12,8 @@ namespace MemesProject.Models
         public const string ModeratorRole = "Moderator";
 
         public const string DefaultImage = "defaultImage.jpg";
+
+
+
     }
 }

@@ -26,26 +26,26 @@
                 <row class="buttons">
                     <button class="transbutton">
                    
-                        @if(meme.IsLiked)
+                        @if(meme.IsFavourited)
                         {
-                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage"  title="UnLike Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage"  title="Remove an image from Favourites"   alt="Dodaj do ulubionych">
                         }
                         else
                         {
-                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  title="Like Image"   alt="Dodaj do ulubionych">
+                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  title="Add an image to Favourites"   alt="Dodaj do ulubionych">
                         }
                   
                     </button>
                     <button class="transbutton">
-                         @if(meme.IsFavourited)
+                         @if(meme.IsLiked)
                                         {
-                                <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Remove an image from Favourites"   alt="Polub">
+                                <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Unlike Image"   alt="Polub">
                                         }
                                         else
                                         {
-                                             <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" title="Add an image to Favourites"   alt="Polub">
+                                             <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" title="Like Image"   alt="Polub">
                         }
-                
+                     <div id="numberLike @meme.IdMeme">@meme.Likes</div>      
                     </button>
                 </row>
             </div>

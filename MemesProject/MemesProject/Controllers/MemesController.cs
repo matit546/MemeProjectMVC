@@ -82,11 +82,31 @@ namespace MemesProject.Controllers
             var meme = await _context.Memes
                 .Include(m => m.CategoryEntity)
                 .FirstOrDefaultAsync(m => m.IdMeme == id);
+
+
+
+
+
             if (meme == null)
             {
                 return NotFound();
             }
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var userId = await _userManager.GetUserIdAsync(user);
+                var isLiked = await _context.LikedMemes.FirstOrDefaultAsync(x => x.IdMeme == id && x.IdUser == userId);
+                var isFavourited = await _context.FavoritesMemes.FirstOrDefaultAsync(x => x.IdMeme == id && x.IdUser == userId);
 
+                if (isLiked != null)
+                {
+                    meme.IsLiked = true;
+                }
+                if (isFavourited != null)
+                {
+                    meme.IsFavourited = true;
+                }
+            }
             return View(meme);
         }
 
@@ -105,7 +125,7 @@ namespace MemesProject.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,Likes,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme, IFormFile file)
+        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme, IFormFile file)
         {
             //var userName = User.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.GetUserAsync(User);
@@ -238,6 +258,10 @@ namespace MemesProject.Controllers
                 LikedMeme.IdUser = claim.Value;
                 LikedMeme.IdMeme= (long)memeId;
                 _context.LikedMemes.Add(LikedMeme);
+
+                var memeLikePlus = _context.Memes.FirstOrDefault(x => x.IdMeme == memeId);
+                memeLikePlus.Likes += 1;
+                _context.Memes.Update(memeLikePlus);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -245,6 +269,9 @@ namespace MemesProject.Controllers
             if(memeLike!=null)
             {
                 _context.LikedMemes.Remove(memeLike);
+                var memeLikePlus = _context.Memes.FirstOrDefault(x => x.IdMeme == memeId);
+                memeLikePlus.Likes -= 1;
+                _context.Memes.Update(memeLikePlus);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
