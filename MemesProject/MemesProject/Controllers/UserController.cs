@@ -35,7 +35,7 @@ namespace MemesProject.Controllers
             var userId = await _userManager.GetUserIdAsync(user);
             var isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
 
-            var observedUsersinfo = await _context.Observations.Where(x => x.IdUser == applicationUser.Id).ToListAsync();
+            var observedUsersinfo = await _context.Observations.Where(x => x.IdUser == applicationUser.Id).Include(x=>x.ApplicationUser).Take(3).ToListAsync();
     
             UserInformation userInf = new UserInformation
             {
@@ -52,11 +52,10 @@ namespace MemesProject.Controllers
                 userInf.Observers = new List<ObserverUserInfo>();
                 foreach (var userDb in observedUsersinfo)
                 {
-                    var userObserverData = await _context.Users.FirstOrDefaultAsync(x => x.Id== userDb.IdObservedUser);
                     ObserverUserInfo observerUser = new ObserverUserInfo();
 
-                    observerUser.AvatarImage = userObserverData.AvatarImage;
-                    observerUser.Username = userObserverData.RealUserName;
+                    observerUser.AvatarImage = userDb.ApplicationUser.AvatarImage;
+                    observerUser.Username = userDb.ApplicationUser.RealUserName;
                   
                     userInf.Observers.Add(observerUser);
                 }
