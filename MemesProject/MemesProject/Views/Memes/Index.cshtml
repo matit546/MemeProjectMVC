@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MemesProject.Models.Meme>
+﻿@model MemesProject.Models.ViewModels.MemeViewModel
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @{
@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-@foreach(Meme meme in Model)
+@foreach(var meme in Model.Memes)
     {
     <div class="center shadow-full">
         <div class="memecontainer">
@@ -55,8 +55,16 @@
     <a asp-action="Details" asp-route-id="@meme.IdMeme">Details</a>
     <a asp-action="Delete" asp-route-id="@meme.IdMeme">Delete</a>
     }
-
-    
+    @{
+        var prevDisabled = !Model.PagingInfo.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.PagingInfo.HasNextPage ? "disabled" : "";
+    }
+      <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage - 1)"  class="btn btn-info @prevDisabled "> < </a>
+       <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
+                 page-class-selected="btn btn-info active" class="btn-group">
+            </div> 
+  
+    <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage + 1)"  class="btn btn-info @nextDisabled">></a>
 
 @section Scripts {
 

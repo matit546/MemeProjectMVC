@@ -30,11 +30,15 @@ namespace MemesProject.Controllers
             {
                 return NotFound("Uzytkownik o nazwie "+id+" nie istnieje");
             }
+            var isObservedDb= new Observation();
+            if (User.Identity.IsAuthenticated)
+            {
 
-            var user = await _userManager.GetUserAsync(User);
-            var userId = await _userManager.GetUserIdAsync(user);
-            var isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
 
+                var user = await _userManager.GetUserAsync(User);
+                var userId = await _userManager.GetUserIdAsync(user);
+                 isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
+            }
             var observedUsersinfo = await _context.Observations.Where(x => x.IdUser == applicationUser.Id).Include(x=>x.ApplicationUser).Take(3).ToListAsync();
     
             UserInformation userInf = new UserInformation
@@ -60,12 +64,13 @@ namespace MemesProject.Controllers
                     userInf.Observers.Add(observerUser);
                 }
             }
-
-            if (isObservedDb != null)
+            if (User.Identity.IsAuthenticated)
             {
-                userInf.isObserved = true;
+                if (isObservedDb != null)
+                {
+                    userInf.isObserved = true;
+                }
             }
-
             return View(userInf);
  
         }

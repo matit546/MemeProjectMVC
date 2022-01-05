@@ -14,5 +14,6 @@ namespace MemesProject.Models
         public bool isObserved { get; set; }
 
         public IList<ObserverUserInfo> Observers { get; set; }
+
     }
 }

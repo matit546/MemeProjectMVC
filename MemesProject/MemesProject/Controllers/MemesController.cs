@@ -11,6 +11,7 @@ using MemesProject.Helpers;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using MemesProject.Models.ViewModels;
 
 namespace MemesProject.Controllers
 {
@@ -18,7 +19,7 @@ namespace MemesProject.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        private readonly int PageSize = 5;
         public MemesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -26,31 +27,60 @@ namespace MemesProject.Controllers
         }
 
         // GET: Memes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int Page=1)
         {
             if (!User.Identity.IsAuthenticated)
             {
-                var memes = _context.Memes.Include(m => m.CategoryEntity);
-                return View(await memes.ToListAsync());
+                MemeViewModel memesViewNotAuthorized = new MemeViewModel();
+                var memes = await _context.Memes.Include(m => m.CategoryEntity).Skip((Page-1)*PageSize).Take(PageSize).ToListAsync();
+    
+                memesViewNotAuthorized.PagingInfo = new PagingInfo()
+                {
+                    CurrentPage = Page,
+                    ItemsPerPage = PageSize,
+                    TotalItem = await _context.Memes.CountAsync(),
+                    urlParam = "Memes?Page=:",
+                    
+                };
+
+                memesViewNotAuthorized.Memes = memes;
+                return View(memesViewNotAuthorized);
             }
+
+
+
             var claimsIdendity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+            MemeViewModel memeViewModel = new MemeViewModel();
 
-            var applicationDbContext = _context.Memes.Include(m => m.CategoryEntity);
-            
+
+
+            var applicationDbContext =  await _context.Memes.Include(m => m.CategoryEntity).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+                
+
             var likeJoinQuery =
-            from meme in _context.Memes
+            from meme in applicationDbContext
             join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
             where likedMeme.IdUser==claim.Value
+       
             select meme;
 
             var favouriteJoinQuery =
-            from meme in _context.Memes
+            from meme in applicationDbContext
             join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
             where FavoritesMemes.IdUser == claim.Value
             select meme;
 
-            await applicationDbContext.ForEachAsync(i =>
+            memeViewModel.PagingInfo = new PagingInfo()
+
+            {
+                CurrentPage = Page,
+                ItemsPerPage = PageSize,
+                TotalItem = await _context.Memes.CountAsync(),
+                urlParam = "Memes?Page=:",
+
+            };
+            applicationDbContext.ForEach(i =>
             {
                 if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme)){
                     i.IsLiked= true;
@@ -58,7 +88,7 @@ namespace MemesProject.Controllers
             });
 
 
-            await applicationDbContext.ForEachAsync(i =>
+             applicationDbContext.ForEach(i =>
             {
                 if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
                 {
@@ -66,9 +96,9 @@ namespace MemesProject.Controllers
                 }
             });
 
+            memeViewModel.Memes = applicationDbContext;
 
-
-            return View(await applicationDbContext.ToListAsync());
+            return View( memeViewModel);
         }
 
         // GET: Memes/Details/5
@@ -132,7 +162,7 @@ namespace MemesProject.Controllers
             meme.IdUser = user.RealUserName;
 
             meme.File = ImageChanger.ImageToBytes(file);
-
+            
             meme.Date = DateTime.Now;
             //if (ModelState.IsValid)
             //{
