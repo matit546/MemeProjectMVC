@@ -88,8 +88,28 @@ namespace MemesProject.Controllers
         public async Task<IActionResult> GetCommentHub(long? Id)
         {
             var commentHub = new List<CommentsHub>();
-            commentHub = await _context.CommentsHubs.Where(x => x.IdMeme == Id).ToListAsync();
-            return Ok(commentHub);
+            commentHub = await _context.CommentsHubs.Where(x => x.IdMeme == Id).Include(y=>y.Comments).ToListAsync();
+            return PartialView(@"~/Views/Shared/_CommentsHubListPartial.cshtml", commentHub);
+        }
+        [HttpPost]
+        public async Task<ActionResult> CreateComment(Comment comment)
+        {
+            //if (ModelState.IsValid)
+            //{
+
+                var user = await _userManager.GetUserAsync(User);
+
+                comment.IdUser = user.UserName;
+                //comment.IdCommentsHub  = Id.Value;
+                comment.Date = DateTime.Now;
+                _context.Add(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Memes", new { Id = comment.IdMeme });
+            //}
+            //else
+            //{
+            //    return Json("Błąd, brak wprowadzonych danych");
+            //}
         }
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)

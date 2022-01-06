@@ -1,0 +1,35 @@
+﻿@model MemesProject.Models.Comment
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateComment">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <input type="hidden" id="IdCommentHub" asp-for="IdCommentsHub" />
+            <input type="hidden" id="IdMeme" asp-for="IdMeme" />
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                <input asp-for="Text" id="TextComm" class="form-control" />
+                @*<span asp-validation-for="Text" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Odpowiedz" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+        //$("#CreateComment").click(function(){
+        //    var data={  
+        //    //IdCommentHub:$(this).closest('div').find('#IdCommentHub').val(),
+        //    IdCommentHub:$("#IdCommentHub").val(),
+        //    TextComm:$('#TextComm').val(),
+        //    };
+        //    console.log(data);
+        //    $.ajax({
+        //        type: 'POST',
+        //        data: data,
+        //        url: "/Comments/CreateComment?Id="+IdCommentHub,
+        //        dataType: "json",
+        //    });
+        //});
+</script>

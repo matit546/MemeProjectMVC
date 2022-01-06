@@ -2,6 +2,7 @@
 {
     public class CommentViewModel
     {
+        public long IdCommentHub { get; set; }
         public long IdMeme { get; set; }
         public string Text { get; set; }
         public DateTime Date { get; set; }
