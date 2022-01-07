@@ -1,22 +1,27 @@
 ﻿@model IEnumerable<MemesProject.Models.CommentsHub>
 @foreach (var item in Model)
 {
-    await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });
+    <br><a>$$$$$$$$$$$$$$$$$$$$$$</a><br><br>
     @foreach (var comment in item.Comments) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => comment.IdUser)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => comment.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => comment.Date)
-            </td>
 
-        </tr>
-        <br />
-        <a>-----</a>
-        <br />
+        <div>
+            <br><a>------</a>
+            @Html.DisplayFor(modelItem => comment.IdUser)
+            <br>
+        </div>
+        <div>
+            <br><a>------</a>
+            @Html.DisplayFor(modelItem => comment.Text)
+            <br>
+        </div>
+        <div>
+            <br><a>------</a>
+            @Html.DisplayFor(modelItem => comment.Date)
+            <br>
+        </div>
+        
     }
+    <div>
+        @{await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });}
+    </div>
 }
