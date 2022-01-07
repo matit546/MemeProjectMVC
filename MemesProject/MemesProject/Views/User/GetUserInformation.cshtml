@@ -39,13 +39,13 @@
                         <p>@Model.Username</p>
                     </div>
                      <div class="row">
-                        <p>Data Założenia: @Model.AccountRegisterDate</p>
+                        <p>Register Account Date: @Model.AccountRegisterDate</p>
                     </div>
                      <div class="row">
-                        <p>Ilość komentarzy:@Model.IloscKomentarzy</p>
+                        <p>Count komentarzy:@Model.IloscKomentarzy</p>
                     </div>
                      <div class="row">
-                        <p>Ilość Memów:@Model.IloscMemow</p>
+                        <p>Number Memów:@Model.IloscMemow</p>
                     </div>
       
                 </div>
@@ -79,8 +79,25 @@
 </div>
 <br />
 </div>
-      <h1>Memy użytkownika</h1>
+     @if(User.Identity.IsAuthenticated)
+     {    
+         @if ( User.Identity.Name == @Model.Email)
+         {
+             <h1>My Memes</h1>
+   <a  asp-controller="User" asp-action="FavouriteMemes">Favourites Memes</a>
+    }else{
+           <h1>Memes of </h1>
+        <h1> @Model.Username</h1>
+    }
+
+}
+else
+{
+       <h1>Memes of </h1>
       <h1> @Model.Username</h1>
+}
+
+
 @foreach(var meme in Model.memeViewModel.Memes)
     {
     <div class="center shadow-full">

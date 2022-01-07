@@ -16,7 +16,8 @@ namespace MemesProject.Models
 
         public IList<ObserverUserInfo> Observers { get; set; }
 
-        public MemeViewModel memeViewModel { get; set; }    
+        public MemeViewModel memeViewModel { get; set; }
+
 
     }
 }

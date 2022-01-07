@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MemesProject.Controllers
 {
@@ -204,6 +205,61 @@ namespace MemesProject.Controllers
 
             return RedirectToAction("GetUserInformation", new { id = id });
 
+        }
+        [Authorize]
+        public async Task<IActionResult> FavouriteMemes(int Page = 1)
+        {
+
+            var claimsIdendity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+
+            MemeViewModel memeViewModel = new MemeViewModel();
+
+            var memess = await _context.Memes.Include(m => m.CategoryEntity).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+
+
+            var likeJoinQuery =
+            from meme in memess
+            join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
+            where likedMeme.IdUser == claim.Value
+
+            select meme;
+
+            var favouriteJoinQuery =
+            from meme in memess
+            join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
+            where FavoritesMemes.IdUser == claim.Value
+            select meme;
+
+            memeViewModel.PagingInfo = new PagingInfo()
+
+            {
+                CurrentPage = Page,
+                ItemsPerPage = PageSize,
+                TotalItem = favouriteJoinQuery.Count(),
+                urlParam = "FavouriteMemes?Page=:",
+
+            };
+            memess.ForEach(i =>
+            {
+                if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                {
+                    i.IsLiked = true;
+                }
+            });
+
+
+            memess.ForEach(i =>
+            {
+                if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                {
+                    i.IsFavourited = true;
+                }
+            });
+
+            memeViewModel.Memes = favouriteJoinQuery.ToList();
+
+            return View(memeViewModel);
         }
     }
 

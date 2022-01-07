@@ -37,14 +37,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Memes" asp-action="Index">Memes</a>
                             </li>
                     <li>
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                      </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
+            @await Component.InvokeAsync("CategoryList")
                     </li>
                     </ul>
                     
@@ -202,13 +195,29 @@
                 },  
                 error: function(response) {  
             
-                }  
+                } 
             });
     
       });
     });
 
+   $(function() {
+    $('#categoriesList').change(function() {
+        if( $(this).val()==null)  return;
 
+   
+       var  url = 'Memes/category/'+ $(this).val();
+
+                if(window.location.href.includes('Memes/category/')){
+          var url=$(this).val();
+       }
+        if (url != null && url != '' ) {
+                    $(location).removeAttr("href");
+           $(location).attr('href',url);
+        }
+    });
+
+});
    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
