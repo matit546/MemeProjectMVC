@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using MemesProject.Helpers;
 using MemesProject.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -102,6 +103,7 @@ namespace MemesProject.Areas.Identity.Pages.Account
 
             [BindProperty]
             [Display(Name = "Avatar")]
+            [DataType(DataType.ImageUrl)]
             public IFormFile AvatarImage { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -123,6 +125,14 @@ namespace MemesProject.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+            if (Input.AvatarImage != null)
+            {
+                if (!IsImage.IsImagee(Input.AvatarImage))
+                {
+                    ModelState.AddModelError(string.Empty, "This is not an image or image size is too big");
+                    return Page();
+                }
+            }
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {

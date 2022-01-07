@@ -289,9 +289,9 @@ namespace MemesProject.Controllers
                 LikedMeme.IdMeme= (long)memeId;
                 _context.LikedMemes.Add(LikedMeme);
 
-                var memeLikePlus = _context.Memes.FirstOrDefault(x => x.IdMeme == memeId);
+                var memeLikePlus = await _context.Memes.FindAsync(memeId);
                 memeLikePlus.Likes += 1;
-                _context.Memes.Attach(memeLikePlus);
+               // _context.Memes.Attach(memeLikePlus);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -299,9 +299,9 @@ namespace MemesProject.Controllers
             if(memeLike!=null)
             {
                 _context.LikedMemes.Remove(memeLike);
-                var memeLikePlus = _context.Memes.FirstOrDefault(x => x.IdMeme == memeId);
+                var memeLikePlus = await _context.Memes.FindAsync(memeId);
                 memeLikePlus.Likes -= 1;
-                _context.Memes.Update(memeLikePlus);
+            //    _context.Memes.Update(memeLikePlus);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

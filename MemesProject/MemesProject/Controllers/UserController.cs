@@ -54,7 +54,7 @@ namespace MemesProject.Controllers
                 Username = applicationUser.RealUserName,
                 AccountRegisterDate = applicationUser.Account_Register_Date,
                 AvatarImage = applicationUser.AvatarImage,
-                 IloscKomentarzy= await _context.Comments.Where(u => u.IdUser == id).CountAsync(),
+                IloscKomentarzy= await _context.Comments.Where(u => u.IdUser == id).CountAsync(),
                 IloscMemow = await _context.Memes.Where(u => u.IdUser == id).CountAsync(),
                 Email = applicationUser.Email,
                 memeViewModel = new MemeViewModel
@@ -215,28 +215,22 @@ namespace MemesProject.Controllers
 
             MemeViewModel memeViewModel = new MemeViewModel();
 
-            var memess = await _context.Memes.Include(m => m.CategoryEntity).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
 
+            var memess = await _context.FavoritesMemes.Include(m => m.Meme).Where(x=>x.IdUser==claim.Value).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
 
             var likeJoinQuery =
             from meme in memess
             join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
             where likedMeme.IdUser == claim.Value
-
             select meme;
 
-            var favouriteJoinQuery =
-            from meme in memess
-            join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
-            where FavoritesMemes.IdUser == claim.Value
-            select meme;
 
             memeViewModel.PagingInfo = new PagingInfo()
 
             {
                 CurrentPage = Page,
                 ItemsPerPage = PageSize,
-                TotalItem = favouriteJoinQuery.Count(),
+                TotalItem = await _context.FavoritesMemes.Where(x => x.IdUser == claim.Value).CountAsync(),
                 urlParam = "FavouriteMemes?Page=:",
 
             };
@@ -244,20 +238,23 @@ namespace MemesProject.Controllers
             {
                 if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme))
                 {
-                    i.IsLiked = true;
+                    i.Meme.IsLiked = true;
                 }
             });
 
 
             memess.ForEach(i =>
             {
-                if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
-                {
-                    i.IsFavourited = true;
-                }
+               
+                    i.Meme.IsFavourited = true;
+                
             });
-
-            memeViewModel.Memes = favouriteJoinQuery.ToList();
+            IList<Meme> memes = new List<Meme>();
+            foreach (var meme in memess)
+            {
+                memes.Add(meme.Meme);
+            }
+            memeViewModel.Memes = memes;
 
             return View(memeViewModel);
         }

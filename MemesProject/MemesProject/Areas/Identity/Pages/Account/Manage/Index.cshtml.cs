@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using MemesProject.Data;
+using MemesProject.Helpers;
 using MemesProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -105,7 +106,11 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
             {
                 if (Input.AvatarImage != null)
                 {
-
+                    if (!IsImage.IsImagee(Input.AvatarImage))
+                    {
+                        StatusMessage = "This is not an image or image size is too big";
+                        return RedirectToPage();
+                    }
                     using var stream = new MemoryStream();
                     await Input.AvatarImage.CopyToAsync(stream);
                     user.AvatarImage = stream.ToArray();
@@ -121,6 +126,11 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
 
             if (Input.AvatarImage != null)
             {
+                if (!IsImage.IsImagee(Input.AvatarImage))
+                {
+                    StatusMessage = "This is not an image or image size is too big";
+                    return RedirectToPage();
+                }
                 using var stream = new MemoryStream();
                 await Input.AvatarImage.CopyToAsync(stream);
                 user.AvatarImage = stream.ToArray();
