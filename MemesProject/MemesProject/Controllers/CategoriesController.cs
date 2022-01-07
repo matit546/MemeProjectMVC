@@ -149,5 +149,12 @@ namespace MemesProject.Controllers
         {
             return _context.Categories.Any(e => e.IdCategory == id);
         }
+
+
+
+
+
+
+
     }
 }

@@ -79,3 +79,64 @@
 </div>
 <br />
 </div>
+      <h1>Memy użytkownika</h1>
+      <h1> @Model.Username</h1>
+@foreach(var meme in Model.memeViewModel.Memes)
+    {
+    <div class="center shadow-full">
+        <div class="memecontainer">
+            <div class="rounded item">
+                <div class="memetitle"> @meme.Title </div>
+                @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
+                <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
+                    @{
+                        string base641 = Convert.ToBase64String(meme.File);
+                        string imagesrc2 = "data:image/png;base64," + base641; 
+                    }
+                    <img src="@imagesrc2" class="imgmiddle" alt="@meme.DescriptionAlt">
+                </a>
+                <row class="buttons">
+                    <button class="transbutton">
+                   
+                        @if(meme.IsFavourited)
+                        {
+                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage"  title="Remove an image from Favourites"   alt="Dodaj do ulubionych">
+                        }
+                        else
+                        {
+                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  title="Add an image to Favourites"   alt="Dodaj do ulubionych">
+                        }
+                  
+                    </button>
+                    <button class="transbutton">
+                         @if(meme.IsLiked)
+                                        {
+                                <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Unlike Image"   alt="Polub">
+                                        }
+                                        else
+                                        {
+                                             <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" title="Like Image"   alt="Polub">
+                        }
+                     <div id="numberLike @meme.IdMeme">@meme.Likes</div>      
+                    </button>
+                </row>
+            </div>
+        </div>
+    </div>
+    <a asp-action="Edit" asp-route-id="@meme.IdMeme">Edit</a>
+    <a asp-action="Details" asp-route-id="@meme.IdMeme">Details</a>
+    <a asp-action="Delete" asp-route-id="@meme.IdMeme">Delete</a>
+    }
+
+  
+
+  @{
+        var prevDisabled = !Model.memeViewModel.PagingInfo.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.memeViewModel.PagingInfo.HasNextPage ? "disabled" : "";
+    }
+      <a asp-action="GetUserInformation" asp-route-id="@Model.Username" asp-route-Page="@(Model.memeViewModel.PagingInfo.CurrentPage - 1)"  class="btn btn-info @prevDisabled "> < </a>
+       <div page-model="@Model.memeViewModel.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
+                 page-class-selected="btn btn-info active" class="btn-group">
+            </div> 
+  
+    <a asp-action="GetUserInformation"  asp-route-Page="@(Model.memeViewModel.PagingInfo.CurrentPage + 1)" asp-route-id="@Model.Username" class="btn btn-info @nextDisabled">></a>

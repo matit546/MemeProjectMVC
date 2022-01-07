@@ -1,5 +1,6 @@
 ﻿using MemesProject.Data;
 using MemesProject.Models;
+using MemesProject.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace MemesProject.Controllers
 {
     public class UserController : Controller
     {
+        private readonly int PageSize = 5;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -21,8 +23,10 @@ namespace MemesProject.Controllers
               return View();
         }
 
+
+  
         [HttpGet]
-        public async Task<IActionResult> GetUserInformation(string id)
+        public async Task<IActionResult> GetUserInformation(string id, int Page = 1)
         {
             //var applicationUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == id.ToLower());
             var applicationUser = await _context.Users.FirstOrDefaultAsync(x => x.RealUserName.ToLower() == id.ToLower());  //uzyc gdy sie przesyla RealUserName
@@ -30,26 +34,83 @@ namespace MemesProject.Controllers
             {
                 return NotFound("Uzytkownik o nazwie "+id+" nie istnieje");
             }
+            var userId = "";
             var isObservedDb= new Observation();
             if (User.Identity.IsAuthenticated)
             {
-
-
                 var user = await _userManager.GetUserAsync(User);
-                var userId = await _userManager.GetUserIdAsync(user);
-                 isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
+                userId = await _userManager.GetUserIdAsync(user);
+                if (userId == null)
+                {
+                    return NotFound("Uzytkownik o nazwie " + userId + " nie istnieje");
+                }
+                isObservedDb = await _context.Observations.FirstOrDefaultAsync(x => x.IdUser == userId && x.IdObservedUser == applicationUser.Id);
             }
             var observedUsersinfo = await _context.Observations.Where(x => x.IdUser == applicationUser.Id).Include(x=>x.ApplicationUser).Take(3).ToListAsync();
-    
+         
             UserInformation userInf = new UserInformation
             {
                 Username = applicationUser.RealUserName,
                 AccountRegisterDate = applicationUser.Account_Register_Date,
                 AvatarImage = applicationUser.AvatarImage,
-                //      IloscKomentarzy=_context.Comm
-                IloscMemow = _context.Memes.Where(u => u.IdUser == id).Count(),
+                 IloscKomentarzy= await _context.Comments.Where(u => u.IdUser == id).CountAsync(),
+                IloscMemow = await _context.Memes.Where(u => u.IdUser == id).CountAsync(),
                 Email = applicationUser.Email,
+                memeViewModel = new MemeViewModel
+                {
+                    PagingInfo = new PagingInfo()
+                    {
+                        CurrentPage = Page,
+                        ItemsPerPage = PageSize,
+                        TotalItem = await _context.Memes.Where(m=>m.IdUser==id).CountAsync(),
+                        urlParam = $"{id}?Page=:",
+                    }
+              } 
+                
             };
+            if (!User.Identity.IsAuthenticated)
+            {
+                var memes = await _context.Memes.Include(m => m.CategoryEntity).Where(m => m.IdUser == id).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+                userInf.memeViewModel.Memes = memes;
+            }
+            else
+            {
+
+                var memes =  await _context.Memes.Include(m => m.CategoryEntity).Where(m => m.IdUser == id).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+
+
+                var likeJoinQuery =
+                from meme in memes
+                join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
+                where likedMeme.IdUser == userId
+
+                select meme;
+
+                var favouriteJoinQuery =
+                from meme in memes
+                join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
+                where FavoritesMemes.IdUser == userId
+                select meme;
+
+
+                memes.ForEach(i =>
+                {
+                    if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                    {
+                        i.IsLiked = true;
+                    }
+                });
+
+
+                memes.ForEach(i =>
+                {
+                    if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                    {
+                        i.IsFavourited = true;
+                    }
+                });
+                userInf.memeViewModel.Memes = memes;
+            }
 
             if (observedUsersinfo.Any())
             {
@@ -71,6 +132,8 @@ namespace MemesProject.Controllers
                     userInf.isObserved = true;
                 }
             }
+
+          
             return View(userInf);
  
         }
@@ -143,4 +206,7 @@ namespace MemesProject.Controllers
 
         }
     }
+
+
+
 }

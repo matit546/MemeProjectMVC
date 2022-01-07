@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MemesProject.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace MemesProject.Models
 {
@@ -14,6 +15,8 @@ namespace MemesProject.Models
         public bool isObserved { get; set; }
 
         public IList<ObserverUserInfo> Observers { get; set; }
+
+        public MemeViewModel memeViewModel { get; set; }    
 
     }
 }

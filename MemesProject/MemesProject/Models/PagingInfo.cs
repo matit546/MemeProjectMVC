@@ -24,7 +24,7 @@
         {
             get
             {
-                return (CurrentPage <TotalItem);
+                return (CurrentPage < totalPage);
             }
         }
     }

@@ -344,5 +344,85 @@ namespace MemesProject.Controllers
 
             return BadRequest();
         }
+
+
+        public async Task<IActionResult> Category(string? id, int Page=1)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                MemeViewModel memesViewNotAuthorized = new MemeViewModel();
+                var memes = await _context.Memes.Include(m => m.CategoryEntity).Where(m => m.CategoryEntity.CategoryName == id).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+
+                memesViewNotAuthorized.PagingInfo = new PagingInfo()
+                {
+                    CurrentPage = Page,
+                    ItemsPerPage = PageSize,
+                    TotalItem = await _context.Memes.Where(m => m.CategoryEntity.CategoryName == id).CountAsync(),
+                    urlParam = "Memes?Page=:",
+
+                };
+
+                memesViewNotAuthorized.Memes = memes;
+                return View(memesViewNotAuthorized);
+            }
+
+
+
+            var claimsIdendity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
+            MemeViewModel memeViewModel = new MemeViewModel();
+
+
+
+            var memess = await _context.Memes.Include(m => m.CategoryEntity).Where(m => m.CategoryEntity.CategoryName == id).Skip((Page - 1) * PageSize).Take(PageSize).ToListAsync();
+
+
+            var likeJoinQuery =
+            from meme in memess
+            join likedMeme in _context.LikedMemes on meme.IdMeme equals likedMeme.IdMeme
+            where likedMeme.IdUser == claim.Value
+
+            select meme;
+
+            var favouriteJoinQuery =
+            from meme in memess
+            join FavoritesMemes in _context.FavoritesMemes on meme.IdMeme equals FavoritesMemes.IdMeme
+            where FavoritesMemes.IdUser == claim.Value
+            select meme;
+
+            memeViewModel.PagingInfo = new PagingInfo()
+
+            {
+                CurrentPage = Page,
+                ItemsPerPage = PageSize,
+                TotalItem = await _context.Memes.Where(m => m.CategoryEntity.CategoryName == id).CountAsync(),
+                urlParam = "Memes?Page=:",
+
+            };
+            memess.ForEach(i =>
+            {
+                if (likeJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                {
+                    i.IsLiked = true;
+                }
+            });
+
+
+            memess.ForEach(i =>
+            {
+                if (favouriteJoinQuery.Any(c => c.IdMeme == i.IdMeme))
+                {
+                    i.IsFavourited = true;
+                }
+            });
+
+            memeViewModel.Memes = memess;
+
+            return View(memeViewModel);
+        }
     }
+
+   
+
+
 }
