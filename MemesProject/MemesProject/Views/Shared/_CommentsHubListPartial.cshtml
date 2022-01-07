@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<MemesProject.Models.CommentsHub>
 @foreach (var item in Model)
 {
+    await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });
     @foreach (var comment in item.Comments) {
         <tr>
             <td>
@@ -18,5 +19,4 @@
         <a>-----</a>
         <br />
     }
-    await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });
 }
