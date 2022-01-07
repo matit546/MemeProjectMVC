@@ -42,7 +42,8 @@ body {
             }
 
             .center .memecontainer .item .imgmiddle {
-                width: 90%;
+                width: 100%;
+
             }
 
             .center .memecontainer .item .buttons {
@@ -63,6 +64,50 @@ body {
                     .center .memecontainer .item .buttons .transbutton img:hover {
                     }
 
+.Buttons-Row {
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    justify-content: space-between
+}
+
+.Items-Center-Row {
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    justify-content:center;
+}
+
+.Label-Item-Center {
+    margin: 10px 0px 10px 0px;
+    display: flex;
+
+    width: 50%;
+
+}
+
+.center-small {
+    margin: auto;
+    width: 35%;
+    min-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.center-large {
+    margin: auto;
+    width: 65%;
+    min-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.center-Button{
+    margin: auto;
+    width: 17%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
 .shadow-full {
     box-shadow: rgb(161 161 161) 0 0 10px 10px;
 }
@@ -81,15 +126,15 @@ body {
 }
 
 .SetFontSizeMin {
-    font-size: 15px !important;
+
 }
 
 .SetFontSizeMed {
-    font-size: 20px !important;
+    font-size: 17px !important;
 }
 
 .SetFontSizeMax {
-    font-size: 25px !important;
+    font-size: 20px !important;
 }
 
 
@@ -146,8 +191,8 @@ body {
 
 .avatar {
     vertical-align: middle;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
@@ -161,3 +206,57 @@ body {
     margin-right: 0px;
    
 }
+
+.WcagLayoutButtons {
+    background-color: white;
+    padding: 0;
+    border: none;
+}
+
+    .WcagLayoutButtons .ButtonContainter {
+        width: 32px;
+        height: 26px;
+        border: 2px solid black;
+    }
+
+.Spacing {
+    padding:0 5px 0 5px;
+}
+
+.CenterNav {
+    padding: 7.5px 0 7.5px 0
+}
+
+.Buttons-Medium {
+    width: 32px;
+    height: 32px;
+}
+
+.PictureContainer {
+    max-height: 300px;
+    max-width: 300px;
+    padding: 10px;
+}
+
+.Padding-10{
+    padding: 10px;
+}
+
+.Padding-20 {
+    padding: 20px;
+}
+
+.Padding-TB10 {
+    padding-top:10px ;
+    padding-bottom: 10px;
+}
+
+.Padding-LR30 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.text-center {
+    text-align:center;
+}
+

@@ -5,9 +5,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <div class="center-small shadow" style="background-color:azure">
+        <br />
+        <div style="text-align:center">Chcesz podzielić się własnym śmiesznym zdjęciem?</div>
+        <a asp-action="Create">
+            <div style="text-align:center">Stwórz własnego mema!</div>
+        </a>
+        <br />
+    </div>
 </p>
 @foreach(var meme in Model.Memes)
     {
@@ -23,16 +29,16 @@
                     }
                     <img src="@imagesrc" class="imgmiddle" alt="@meme.DescriptionAlt">
                 </a>
-                <row class="buttons">
+                <div class="buttons">
                     <button class="transbutton">
                    
                         @if(meme.IsFavourited)
                         {
-                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage"  title="Remove an image from Favourites"   alt="Dodaj do ulubionych">
+                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage" title="Remove an image from Favourites" alt="Dodaj do ulubionych">
                         }
                         else
                         {
-                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  title="Add an image to Favourites"   alt="Dodaj do ulubionych">
+                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage" title="Add an image to Favourites" alt="Dodaj do ulubionych">
                         }
                   
                     </button>
@@ -47,24 +53,35 @@
                         }
                      <div id="numberLike @meme.IdMeme">@meme.Likes</div>      
                     </button>
-                </row>
+                </div>
+            </div>
+            <div class ="Buttons-Row">
+            <a asp-action="Edit" asp-route-id="@meme.IdMeme">
+                <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
+            </a>
+
+            <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                <img id="imageid" src="/images/icons8-comments-96.png" title="Komentarze" alt="Komentuj" class="Buttons-Medium BaseDetails">
+            </a>
+   
+            <a asp-action="Delete" asp-route-id="@meme.IdMeme">
+                <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
+            </a>
             </div>
         </div>
     </div>
-    <a asp-action="Edit" asp-route-id="@meme.IdMeme">Edit</a>
-    <a asp-action="Details" asp-route-id="@meme.IdMeme">Details</a>
-    <a asp-action="Delete" asp-route-id="@meme.IdMeme">Delete</a>
     }
     @{
         var prevDisabled = !Model.PagingInfo.HasPreviousPage ? "disabled" : "";
         var nextDisabled = !Model.PagingInfo.HasNextPage ? "disabled" : "";
     }
+    <div class="center" style="background-color:azure">
       <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage - 1)"  class="btn btn-info @prevDisabled "> < </a>
        <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
                  page-class-selected="btn btn-info active" class="btn-group">
             </div> 
-  
     <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage + 1)"  class="btn btn-info @nextDisabled">></a>
+        </div>
 
 @section Scripts {
 

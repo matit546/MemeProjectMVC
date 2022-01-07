@@ -6,62 +6,82 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Meme</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescriptionAlt" class="control-label"></label>
-                <input asp-for="DescriptionAlt" class="form-control" />
-                <span asp-validation-for="DescriptionAlt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="File" class="control-label"></label>
-                <span asp-validation-for="File" class="text-danger"></span> <br />
-                <img ID="impPrev" class="img-fluid rounded" src="~/images/DodajZdjecie.png" />
-            </div>
-            <div class="form-group">
-                <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input <input type="hidden" class="form-check-input" asp-for="IfBlocked" /> 
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input type="hidden" class="form-check-input" asp-for="IfApproved" /> 
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdCategory" class="control-label"></label>
-                <select asp-for="IdCategory" class ="form-control" asp-items="ViewBag.IdCategory"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="center shadow-full">
+    <div class="memecontainer">
+        <div class="rounded item">
+            <div>Stworz Swojego Mema</div>
+            <br />
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div class ="row">
+                    <div class="col-4">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <!--<label asp-for="Title" class="control-label"></label>-->
+                            Tytuł
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <!--<label asp-for="Description" class="control-label"></label>-->
+                            Opis
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <!--<label asp-for="DescriptionAlt" class="control-label"></label>-->
+                            Alternatywny Opis
+                            <input asp-for="DescriptionAlt" class="form-control" />
+                            <span asp-validation-for="DescriptionAlt" class="text-danger"></span>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <!--<label asp-for="IdCategory" class="control-label"></label>-->
+                            Wybierz Kategorię
+                            <select asp-for="IdCategory" class ="form-control" asp-items="ViewBag.IdCategory"></select>
+                        </div>
+                    </div>
+                     <div class="col-4">
+                        <div class="row">
+                            <div class="form-group">
+                                <!--<label asp-for="File" class="control-label"></label>-->
+                                Dodaj Zdjęcie
+                                <span asp-validation-for="File" class="text-danger"></span>
+                                <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
+                                <img ID="impPrev" class="rounded PictureContainer"/>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input <input type="hidden" class="form-check-input" asp-for="IfBlocked" /> 
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input type="hidden" class="form-check-input" asp-for="IfApproved" /> 
+                            </label>
+                        </div>
+                        -->
+                    </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                         <div class="form-group center-Button">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+            </form>
+        </div>
     </div>
 </div>
-
+<!--
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+-->
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

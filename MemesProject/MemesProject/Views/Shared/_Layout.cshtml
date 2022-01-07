@@ -33,27 +33,57 @@
                         </li>
                  
                        
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Memes" asp-action="Index">Memes</a>
-                            </li>
-                    <li>
-            @await Component.InvokeAsync("CategoryList")
-                    </li>
+                        <li class="nav-item">
+                             <a class="nav-link text-dark" asp-area="" asp-controller="Memes" asp-action="Index">Memes</a>
+                        </li>
+                        <li class="nav-item">
+                             @await Component.InvokeAsync("CategoryList")
+                        </li>
                     </ul>
                     
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <button id="WCAGColorButton">Click!</button>
+                            <div class="CenterNav">Kontrast:</div>
                         </li>
+                        <li class="Spacing"></li>
                         <li class="nav-item">
-                            <button id="WCAGFontSizeMinButton">A</button>
+                            <button id="WCAGColorButton" class="WcagLayoutButtons" disabled>
+                                <div class="CenterNav">
+                                    <img id="imageid" src="/images/Styl1.png" title="Zmien paletę kolorów" alt="A" class="ButtonContainter">
+                                </div>
+                            </button>
                         </li>
+                        <li class="Spacing"></li>
                         <li class="nav-item">
-                            <button id="WCAGFontSizeMedButton">A+</button>
+                            <button id="WCAGColorButton2" class="WcagLayoutButtons">
+                                <div class="CenterNav">
+                                    <img id="imageid" src="/images/Styl2.png" title="Zmien paletę kolorów" alt="A" class="ButtonContainter">
+                                </div>
+                            </button>
                         </li>
+                        <li class="Spacing"></li>
                         <li class="nav-item">
-                            <button id="WCAGFontSizeMaxButton">A++</button>
+                             <div class="CenterNav">Czcionka:</div>
                         </li>
+                        <li class="Spacing"></li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMinButton" class="WcagLayoutButtons">
+                                <div class="CenterNav">A</div>
+                            </button>
+                        </li>
+                        <li class="Spacing"></li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMedButton" class="WcagLayoutButtons">
+                                <div class="CenterNav">A+</div>
+                            </button>
+                        </li>
+                        <li class="Spacing"></li>
+                        <li class="nav-item">
+                            <button id="WCAGFontSizeMaxButton" class="WcagLayoutButtons">
+                                <div class="CenterNav">A++</div>
+                            </button>
+                        </li>
+                         <li class="Spacing"></li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -78,6 +108,34 @@
 
     $('#WCAGColorButton').click(function(){
     $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('setblackyelow');
+    $('#WCAGColorButton').prop('disabled', true );
+    $('#WCAGColorButton2').prop('disabled', false );
+
+        $('.favouriteImage').attr('src','/images/like.png').toggleClass("setblackyelow")
+        $('.UnfavouriteImage').attr('src','/images/likeFull.png').toggleClass("setblackyelow")
+
+        $('.likeImage').attr('src','/images/heartEmpty.png').toggleClass("setblackyelow")
+        $('.UnLikeImage').attr('src','/images/heart.png').toggleClass("setblackyelow")
+
+        $('.BaseEdit').attr('src','/images/icons8-edit-96.png').toggleClass("setblackyelow")
+        $('.BaseDetails').attr('src','/images/icons8-comments-96.png').toggleClass("setblackyelow")
+        $('.BaseDelete').attr('src','/images/icons8-trash-96.png').toggleClass("setblackyelow")
+    });
+
+    $('#WCAGColorButton2').click(function(){
+    $('h1, a, div, button, ul, li, body, input, nav, select, option').toggleClass('setblackyelow');
+    $('#WCAGColorButton').prop('disabled', false );
+    $('#WCAGColorButton2').prop('disabled', true );
+
+        $('.favouriteImage').attr('src','/images/likeyellow.png').toggleClass("setblackyelow")
+        $('.UnfavouriteImage').attr('src','/images/likeyellowfull.png').toggleClass("setblackyelow")
+
+        $('.likeImage').attr('src','/images/heartEmptyyellow.png').toggleClass("setblackyelow")
+        $('.UnLikeImage').attr('src','/images/heartyellow.png').toggleClass("setblackyelow")
+
+        $('.BaseEdit').attr('src','/images/edityellow.png').toggleClass("setblackyelow")
+        $('.BaseDetails').attr('src','/images/commentyellow.png').toggleClass("setblackyelow")
+        $('.BaseDelete').attr('src','/images/trashyellow.png').toggleClass("setblackyelow")   
     });
 
     $('#WCAGFontSizeMinButton').click(function(){
@@ -136,14 +194,32 @@
                     if (response != null) {  
 
 
-                if($img.hasClass('likeImage')){
-                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');;
-                }else{
-                       $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
+                if($img.hasClass('likeImage'))
+                {
+                    if( $img.hasClass('setblackyelow'))
+                    {
+                        $img.attr('src', '/images/heartyellow.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                    }
+                    else
+                    {
+                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                    }
                 }
-                    } else {  
+                else
+                {
+
+                    if( $img.hasClass('setblackyelow'))
+                    {
+                        $img.attr('src', '/images/heartEmptyyellow.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
+                    }
+                    else
+                    {
+                        $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
+                    }
+                }
+                } else {  
                    
-                    }  
+                }  
                 },  
                 failure: function(response) {  
                     
@@ -172,14 +248,29 @@
                     if (response != null) {  
 
                 if($img.hasClass('favouriteImage')){
-                         $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                         if( $img.hasClass('setblackyelow'))
+                         {
+                             $img.attr('src', '/images/likeyellowFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                         }
+                         else
+                         {
+                             $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                         }
                          var $numberofLikes = $("[id='numberLike "+memeId+"']");
                          var likes = $numberofLikes.text();
                          let num = parseInt(likes);
                          num+=1;
                         $numberofLikes.text(num);
                 }else{
-                       $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                         if( $img.hasClass('setblackyelow'))
+                         {
+                             $img.attr('src', '/images/likeyellow.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                         }
+                         else
+                         {
+                             $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                       
+                         }
                           var $numberofLikes = $("[id='numberLike "+memeId+"']");
                          var likes = $numberofLikes.text();
                          let num = parseInt(likes);
