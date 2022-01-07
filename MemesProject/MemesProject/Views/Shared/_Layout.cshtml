@@ -292,21 +292,21 @@
       });
     });
 
-   $(function() {
-    $('#categoriesList').change(function() {
-        if( $(this).val()==null)  return;
+   //$(function() {
+   // $('#categoriesList').change(function() {
+   //     if( $(this).val()==null)  return;
 
    
-       var  url = 'Memes/category/'+ $(this).val();
+   //    var  url = 'Memes/category/'+ $(this).val();
 
-                if(window.location.href.includes('Memes/category/')){
-          var url=$(this).val();
-       }
-        if (url != null && url != '' ) {
-                    $(location).removeAttr("href");
-           $(location).attr('href',url);
-        }
-    });
+   //             if(window.location.href.includes('Memes/category/')){
+   //       var url=$(this).val();
+   //    }
+   //     if (url != null && url != '' ) {
+   //                 $(location).removeAttr("href");
+   //        $(location).attr('href',url);
+   //     }
+   // });
 
 });
    </script>

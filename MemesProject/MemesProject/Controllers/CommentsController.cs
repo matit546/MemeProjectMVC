@@ -1,6 +1,7 @@
 ﻿using MemesProject.Data;
 using MemesProject.Models;
 using MemesProject.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,7 @@ namespace MemesProject.Controllers
         }
 
         // POST: CommentsController/Create
+        [Authorize]
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateHub(CommentViewModel commentViewModel)
@@ -82,7 +84,7 @@ namespace MemesProject.Controllers
             {
 
             }
-            return Ok();
+            return RedirectToAction("Details", "Memes", new { Id = commentViewModel.IdMeme });
         }
         [HttpGet]
         public async Task<IActionResult> GetCommentHub(long? Id)
@@ -91,19 +93,23 @@ namespace MemesProject.Controllers
             commentHub = await _context.CommentsHubs.Where(x => x.IdMeme == Id).Include(y=>y.Comments).ToListAsync();
             return PartialView(@"~/Views/Shared/_CommentsHubListPartial.cshtml", commentHub);
         }
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateComment(Comment comment)
         {
             //if (ModelState.IsValid)
             //{
-
                 var user = await _userManager.GetUserAsync(User);
 
-                comment.IdUser = user.UserName;
+                comment.IdUser = user.RealUserName;
                 //comment.IdCommentsHub  = Id.Value;
                 comment.Date = DateTime.Now;
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
+                ModelState.ClearValidationState(nameof(Comment));
+                if (TryValidateModel(comment, nameof(Comment)))
+                {
+                    _context.Add(comment);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction("Details", "Memes", new { Id = comment.IdMeme });
             //}
             //else

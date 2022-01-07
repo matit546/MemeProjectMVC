@@ -162,14 +162,14 @@ namespace MemesProject.Controllers
             meme.IdUser = user.RealUserName;
 
             meme.File = ImageChanger.ImageToBytes(file);
-            
+            var errors2 = ModelState.Values.SelectMany(v => v.Errors);
             meme.Date = DateTime.Now;
-            //if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 _context.Add(meme);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            //}
+            }
             ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "CategoryName", meme.IdCategory);
             return View(meme);
         }
@@ -291,7 +291,7 @@ namespace MemesProject.Controllers
 
                 var memeLikePlus = _context.Memes.FirstOrDefault(x => x.IdMeme == memeId);
                 memeLikePlus.Likes += 1;
-                _context.Memes.Update(memeLikePlus);
+                _context.Memes.Attach(memeLikePlus);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
