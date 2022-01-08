@@ -41,18 +41,18 @@
                         <p>@Model.Username</p>
                     </div>
                      <div class="row">
-                        <p>Data założenia:@Model.AccountRegisterDate</p>
+                        <p>Registered: @Model.AccountRegisterDate</p>
                     </div>
                      <div class="row">
-                        <p>Ilość komentarzy:@Model.IloscKomentarzy</p>
+                        <p>Comments: @Model.IloscKomentarzy</p>
                     </div>
                      <div class="row">
-                        <p>Ilość Memów:@Model.IloscMemow</p>
+                        <p>Created Memes: @Model.IloscMemow</p>
                     </div>
       
                 </div>
-                   <div class="col-sm-4 border border-dark">
-                       Osoby Obserwujące
+                   <div class="col-sm-4 border border-dark Padding-10">
+                       Observers
                        @if(Model.Observers!=null)
                        {
                         @foreach(var obs in Model.Observers)

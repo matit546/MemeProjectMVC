@@ -44,13 +44,19 @@
                     </button>
                 </row>
             </div>
+             <div class ="Buttons-Row">
+            <a asp-action="Edit" asp-route-id="@Model.IdMeme">
+                <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
+            </a>
+   
+            <a asp-action="Delete" asp-route-id="@Model.IdMeme">
+                <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
+            </a>
+            </div>
         </div>
     </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.IdMeme">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
 
