@@ -157,13 +157,17 @@ namespace MemesProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme, IFormFile file)
         {
-            //var userName = User.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.GetUserAsync(User);
             meme.IdUser = user.RealUserName;
-
-            meme.File = ImageChanger.ImageToBytes(file);
-            var errors2 = ModelState.Values.SelectMany(v => v.Errors);
+            var errors1 = ModelState.Values.SelectMany(v => v.Errors);
+            if (file != null)
+            {
+                meme.File = ImageChanger.ImageToBytes(file);
+                ModelState.Remove("File");
+            }
+            
             meme.Date = DateTime.Now;
+            var errors2 = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
                 _context.Add(meme);

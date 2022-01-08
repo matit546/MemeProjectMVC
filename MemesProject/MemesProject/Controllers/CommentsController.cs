@@ -45,7 +45,7 @@ namespace MemesProject.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            commentViewModel.IdUser = user.UserName;
+            commentViewModel.IdUser = user.RealUserName;
             commentViewModel.Date = DateTime.Now;
             commentViewModel.IfBlocked = false;
             commentViewModel.Likes = 0;
@@ -65,24 +65,28 @@ namespace MemesProject.Controllers
                 Dislikes = commentViewModel.Dislikes,
                 IdUser = commentViewModel.IdUser,
             };
-            _context.CommentsHubs.Add(commentHub);
-            try
+            //var errors1 = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
+                _context.CommentsHubs.Add(commentHub);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
 
-            }
-            comments.IdCommentsHub = commentHub.IdCommentHub;
-            _context.Comments.Add(comments);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
+                }
+                comments.IdCommentsHub = commentHub.IdCommentHub;
+                _context.Comments.Add(comments);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
 
+                }
             }
             return RedirectToAction("Details", "Memes", new { Id = commentViewModel.IdMeme });
         }

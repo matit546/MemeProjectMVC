@@ -9,6 +9,6 @@
         public bool IfBlocked { get; set; }
         public int Likes { get; set; }
         public int Dislikes { get; set; }
-        public string IdUser { get; set; }
+        public string? IdUser { get; set; }
     }
 }
