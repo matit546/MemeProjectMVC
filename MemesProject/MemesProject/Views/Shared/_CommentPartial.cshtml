@@ -9,12 +9,24 @@
             <div class="form-group">
                 @*<label asp-for="Text" class="control-label"></label>*@
                 <input asp-for="Text" id="TextComm" class="form-control" />
-                @*<span asp-validation-for="Text" class="text-danger"></span>*@
+                <span asp-validation-for="Text" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Odpowiedz" class="btn btn-primary" />
+                <input type="submit" value="Odpowiedz" class="btn btn-primary" id="addCommentBtn" disabled="disabled"/>
             </div>
         </form>
     </div>
 </div>
+<script>
+    $(function() {
+        $("#TextComm").keyup(function () {
+            if ($("#TextComm").val() == '') {
+                $("#addCommentBtn").prop('disabled', true);
+            } 
+            else {
+                $("#addCommentBtn").prop('disabled', false);
+            }
+        });
+    });
+</script>
 

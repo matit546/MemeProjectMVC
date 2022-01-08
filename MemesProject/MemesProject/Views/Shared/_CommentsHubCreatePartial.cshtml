@@ -28,7 +28,21 @@
             type: 'POST',
             data: data,
             url: '@Url.Action("CreateHub", "Comments")',
-            dataType: "json",
+            //dataType: "json",
+            success: function (result){
+                if(data!=null)
+                {
+                    alert("Your comment has been successfully added!");
+                    $('#Text').val('');
+                    $("#CommentHubs").load("/Comments/GetCommentHub?Id="+IdMeme);
+                }
+                else{
+                    alert("Please, enter the correct value");
+                }
+            },
+            error: function (error) {  
+                alert("Error "+error+" try again later");
+            }
         });
     });
     </script>
