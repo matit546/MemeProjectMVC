@@ -155,18 +155,31 @@ namespace MemesProject.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme, IFormFile file)
+        public async Task<IActionResult> Create([Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IdCategory,IdUser")] Meme meme, IFormFile file)
         {
             var user = await _userManager.GetUserAsync(User);
             meme.IdUser = user.RealUserName;
             var errors1 = ModelState.Values.SelectMany(v => v.Errors);
             if (file != null)
             {
-                meme.File = ImageChanger.ImageToBytes(file);
-                ModelState.Remove("File");
+                if (IsImage.IsImagee(file))
+                {
+                    meme.File = ImageChanger.ImageToBytes(file);
+                    ModelState.Remove("File");
+                }
+                else
+                {
+                    ModelState["File"].Errors.Clear();
+                    ModelState.AddModelError("File", "This is not an image or image size is too big");
+                }
+
+            
             }
             
             meme.Date = DateTime.Now;
+            meme.Likes = 0;
+            meme.IfApproved = false;
+            meme.IfBlocked = false;
             var errors2 = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
@@ -202,7 +215,7 @@ namespace MemesProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(long id, [Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,Likes,IfBlocked,IfApproved,IdCategory,IdUser")] Meme meme)
+        public async Task<IActionResult> Edit(long id, [Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IdCategory,IdUser")] Meme meme)
         {
             if (id != meme.IdMeme)
             {
@@ -292,7 +305,7 @@ namespace MemesProject.Controllers
                 LikedMeme.IdUser = claim.Value;
                 LikedMeme.IdMeme= (long)memeId;
                 _context.LikedMemes.Add(LikedMeme);
-
+          
                 var memeLikePlus = await _context.Memes.FindAsync(memeId);
                 memeLikePlus.Likes += 1;
                // _context.Memes.Attach(memeLikePlus);

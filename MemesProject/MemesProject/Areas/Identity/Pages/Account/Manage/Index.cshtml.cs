@@ -111,16 +111,16 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
                         StatusMessage = "This is not an image or image size is too big";
                         return RedirectToPage();
                     }
-                    using var stream = new MemoryStream();
-                    await Input.AvatarImage.CopyToAsync(stream);
-                    user.AvatarImage = stream.ToArray();
+                    user.AvatarImage = ImageChanger.ImageToBytes(Input.AvatarImage).ToArray();
                     HttpContext.Session.Remove(ST.SessionImageAvatar);
                 }
+
                 user.RealUserName = Username;
                 _db.Users.Update(user);
                 await _db.SaveChangesAsync();
                 await _signInManager.RefreshSignInAsync(user);
                 StatusMessage = "Your profile has been updated";
+                HttpContext.Session.Remove(ST.SessionUserName);
                 return RedirectToPage();
             }
 
@@ -131,9 +131,7 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "This is not an image or image size is too big";
                     return RedirectToPage();
                 }
-                using var stream = new MemoryStream();
-                await Input.AvatarImage.CopyToAsync(stream);
-                user.AvatarImage = stream.ToArray();
+                user.AvatarImage = ImageChanger.ImageToBytes(Input.AvatarImage).ToArray();
                 HttpContext.Session.Remove(ST.SessionImageAvatar);
                 _db.Users.Update(user);
                 await _db.SaveChangesAsync();

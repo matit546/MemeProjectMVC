@@ -142,9 +142,8 @@ namespace MemesProject.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 if (Input.AvatarImage != null)
                 {
-                    using var stream = new MemoryStream();
-                    await Input.AvatarImage.CopyToAsync(stream);
-                    user.AvatarImage = stream.ToArray();
+                    user.AvatarImage = ImageChanger.ImageToBytes(Input.AvatarImage).ToArray();
+
                 }
                 else
                 {

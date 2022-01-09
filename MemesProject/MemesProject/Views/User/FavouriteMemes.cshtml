@@ -16,7 +16,7 @@
             <div class="rounded item">
                 <div class="memetitle"> @meme.Title </div>
                 @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
-                <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                <a  asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
                     @{
                         string base64 = Convert.ToBase64String(meme.File);
                         string imagesrc = "data:image/png;base64," + base64; 

@@ -27,6 +27,7 @@ namespace MemesProject.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             HttpContext.Session.Remove(ST.SessionImageAvatar);
+            HttpContext.Session.Remove(ST.SessionUserName);
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

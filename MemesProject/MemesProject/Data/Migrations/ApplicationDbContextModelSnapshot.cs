@@ -134,7 +134,6 @@ namespace MemesProject.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("IdUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IfBlocked")
@@ -145,7 +144,8 @@ namespace MemesProject.Data.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("IdComment");
 
@@ -243,16 +243,15 @@ namespace MemesProject.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("IdUser")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IfApproved")
+                    b.Property<bool?>("IfApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IfBlocked")
+                    b.Property<bool?>("IfBlocked")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Likes")
+                    b.Property<int?>("Likes")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
