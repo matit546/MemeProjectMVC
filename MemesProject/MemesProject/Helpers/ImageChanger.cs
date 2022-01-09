@@ -22,6 +22,10 @@ namespace MemesProject.Helpers
         {
             int imageWidth = image.Width;
             int imageHeight = image.Height;
+            if(imageWidth<=400)
+            {
+                return image;
+            }
             double ratio = imageWidth / 400;
             int finalHeight = (int)(imageHeight / ratio);
 
