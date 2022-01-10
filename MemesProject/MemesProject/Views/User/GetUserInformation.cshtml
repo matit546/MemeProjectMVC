@@ -97,7 +97,7 @@
          {
              <div class="row">          
                  <div class="col-6">
-                     <h1>Moje Memy</h1>
+                     <h1>My Memes</h1>
                  </div>
                  <div class="col-6">
                  </div>
@@ -158,15 +158,15 @@
                     </button>
                 </row>
                 <div class ="Buttons-Row">
-            <a asp-action="Edit" asp-route-id="@meme.IdMeme">
+            <a asp-controller="Memes" asp-action="Edit" asp-route-id="@meme.IdMeme">
                 <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
             </a>
 
-            <a asp-action="Details" asp-route-id="@meme.IdMeme">
+            <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
                 <img id="imageid" src="/images/icons8-comments-96.png" title="Komentarze" alt="Komentuj" class="Buttons-Medium BaseDetails">
             </a>
    
-            <a asp-action="Delete" asp-route-id="@meme.IdMeme">
+            <a asp-controller="Memes" asp-action="Delete" asp-route-id="@meme.IdMeme">
                 <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
             </a>
             </div>

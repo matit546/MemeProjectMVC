@@ -47,8 +47,14 @@
                 <div class="form-group row">
                     <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="File"></label>
                     <div class="col-6">
-                        <input asp-for="File" class="form-control" />
-                        <span asp-validation-for="File" class="text-danger"></span>
+                      <span asp-validation-for="File" class="text-danger"></span>
+                      @{
+                        string base64 = Convert.ToBase64String(Model.File);
+                        string imagesrc = "data:image/png;base64," + base64; 
+                    }
+                    <img src="@imagesrc" ID="impPrev" class=" rounded PictureContainer"  alt="@Model.Description">
+                                <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
+                                
                     </div>
                 </div>
 

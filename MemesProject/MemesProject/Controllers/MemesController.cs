@@ -201,6 +201,7 @@ namespace MemesProject.Controllers
             }
 
             var meme = await _context.Memes.FindAsync(id);
+           
             if (meme == null)
             {
                 return NotFound();
@@ -226,6 +227,7 @@ namespace MemesProject.Controllers
             {
                 try
                 {
+
                     _context.Update(meme);
                     await _context.SaveChangesAsync();
                 }

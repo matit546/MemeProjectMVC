@@ -22,8 +22,11 @@ namespace MemesProject.ViewComponents
             {
                 var claimsIdendity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdendity.FindFirst(ClaimTypes.NameIdentifier);
-                var username = await _db.Users.Where(u => u.Id == claim.Value).Select(selector: u => u.RealUserName).FirstOrDefaultAsync();
-                HttpContext.Session.SetString(ST.SessionUserName, username);
+                if (claim != null)
+                {
+                    var username = await _db.Users.Where(u => u.Id == claim.Value).Select(selector: u => u.RealUserName).FirstOrDefaultAsync();
+                    HttpContext.Session.SetString(ST.SessionUserName, username);
+                }
             }
        
       
