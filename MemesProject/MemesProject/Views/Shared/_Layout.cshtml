@@ -294,6 +294,15 @@
     
       });
     });
+    function BlockButton(val){
+        var Par=$(val).parent().parent();
+        if ($(val).val() == '') {
+                $(Par).find(".addCommentBtn").prop('disabled', true);
+            } 
+            else {
+                $(Par).find(".addCommentBtn").prop('disabled', false);
+            }
+    }
    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
