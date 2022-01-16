@@ -7,23 +7,23 @@
             @foreach (var comment in item.Comments) {
 
                 <div class="Padding-10">
-                    <div class="row">
+                    <div class="row" style="font-weight:bold">
                         <div>
                             @Html.DisplayFor(modelItem => comment.IdUser)
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-8">
-                            <div class="row bordersolidgray rounded-1">
+                            <div class="row"> 
                                 <div class="col-10 Padding-TB5">
                                     @Html.DisplayFor(modelItem => comment.Text)
                                 </div>
-                                <div class="col-1 Padding-TB5">
+@*                                <div class="col-1 Padding-TB5">
                                     <img src="/images/like.png" class="favouriteImage commentlike" title="Like Image" alt="Polub">
                                 </div>
                                 <div class="col-1 Padding-TB5">
                                     @Html.DisplayFor(modelItem => comment.Likes)
-                                </div>
+                                </div>*@
                             </div>
                         </div>
                         <div class="col-4">

@@ -63,6 +63,8 @@
 
 
 @section Scripts {
-
-   @{await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme=Model.IdMeme });}
+    <div hidden>
+          @{await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme=Model.IdMeme });}
+    </div>
+ 
 }
