@@ -1,27 +1,44 @@
 ﻿@model IEnumerable<MemesProject.Models.CommentsHub>
-@foreach (var item in Model)
-{
-    <br><a>$$$$$$$$$$$$$$$$$$$$$$</a><br><br>
-    @foreach (var comment in item.Comments) {
+<div class="center-large shadow-full">
+    <div class="Padding-20">
+        @foreach (var item in Model)
+        {
+            <div class="Padding-10 shadow-low Margin-10">
+            @foreach (var comment in item.Comments) {
 
-        <div>
-            <br><a>------</a>
-            @Html.DisplayFor(modelItem => comment.IdUser)
-            <br>
-        </div>
-        <div>
-            <br><a>------</a>
-            @Html.DisplayFor(modelItem => comment.Text)
-            <br>
-        </div>
-        <div>
-            <br><a>------</a>
-            @Html.DisplayFor(modelItem => comment.Date)
-            <br>
-        </div>
-        
-    }
-    <div>
-        @{await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });}
+                <div class="Padding-10">
+                    <div class="row">
+                        <div>
+                            @Html.DisplayFor(modelItem => comment.IdUser)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="row bordersolidgray rounded-1">
+                                <div class="col-10 Padding-TB5">
+                                    @Html.DisplayFor(modelItem => comment.Text)
+                                </div>
+                                <div class="col-1 Padding-TB5">
+                                    <img src="/images/like.png" class="favouriteImage commentlike" title="Like Image" alt="Polub">
+                                </div>
+                                <div class="col-1 Padding-TB5">
+                                    @Html.DisplayFor(modelItem => comment.Likes)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            @Html.DisplayFor(modelItem => comment.Date)
+                        </div>
+                    </div>
+                </div>
+                <br/>
+            }
+
+            <div>
+                @{await Html.RenderPartialAsync("_CommentPartial", new Comment { IdCommentsHub=item.IdCommentHub, IdMeme=item.IdMeme });}
+            </div>
+            </div>
+            <br/>
+        }
     </div>
-}
+</div>

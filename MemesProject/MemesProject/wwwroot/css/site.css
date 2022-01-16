@@ -112,6 +112,10 @@ body {
     box-shadow: rgb(161 161 161) 0 0 10px 10px;
 }
 
+.shadow-low {
+    box-shadow: rgb(190 190 190) 0 0 1px 1px;
+}
+
 .displayhidden {
     display: none;
 }
@@ -130,11 +134,11 @@ body {
 }
 
 .SetFontSizeMed {
-    font-size: 17px !important;
+    font-size: 20px !important;
 }
 
 .SetFontSizeMax {
-    font-size: 20px !important;
+    font-size: 23px !important;
 }
 
 
@@ -207,6 +211,16 @@ body {
    
 }
 
+.avatar-Observers {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: block;
+    margin-left: 15px;
+    margin-right: 0px;
+}
+
 .WcagLayoutButtons {
     background-color: white;
     padding: 0;
@@ -246,9 +260,23 @@ body {
     padding: 20px;
 }
 
+.Margin-10 {
+    margin: 10px;
+}
+
+.Margin-LR50 {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
 .Padding-TB10 {
     padding-top:10px ;
     padding-bottom: 10px;
+}
+
+.Padding-TB5 {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .Padding-LR30 {
@@ -260,3 +288,13 @@ body {
     text-align:center;
 }
 
+.bordersolidgray{
+    border-style:solid;
+    border-color:darkgray;
+    border-width:1px;
+}
+
+.commentlike {
+    width:18px;
+    height:18px;
+}

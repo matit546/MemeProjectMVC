@@ -51,7 +51,7 @@
                     </div>
       
                 </div>
-                   <div class="col-sm-4 border border-dark Padding-10">
+                   <div class="col-sm-4 bordersolidgray Padding-10">
                        Observers
                        @if(Model.Observers!=null)
                        {
@@ -59,7 +59,7 @@
                         {
                                   var base64st = Convert.ToBase64String(@obs.AvatarImage);
                                   var imgsrcobs = string.Format("data:image/jpg;base64,{0}", base64st);
-                               <img src="@imgsrcobs" class="avatar-Info-Page" alt="User Avatar Image" />
+                               <img src="@imgsrcobs" class="avatar-Observers" alt="User Avatar Image" />
                                <p>@obs.Username</p>
                     }
                 }
@@ -75,7 +75,7 @@
                          <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj Konto" class="Buttons-Medium BaseEdit">
                      </a>
                      <a  asp-controller="User" asp-action="FavouriteMemes">
-                         <div style="padding:20px 0 20px 0">Ulubione Memy</div>
+                         <div style="padding:20px 0 20px 0">Favorite Memes</div>
                      </a>
                  </div>
              }

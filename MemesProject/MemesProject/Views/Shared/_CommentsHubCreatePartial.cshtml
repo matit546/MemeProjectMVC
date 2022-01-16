@@ -1,18 +1,25 @@
 ﻿@model MemesProject.Models.ViewModels.CommentViewModel
 
-
-<form asp-action="Create">
-
-    <div class="form-group">
-        <input type="hidden" asp-for="@Model.IdMeme" id="IdMeme" class="form-control" />
+<div class="center-large shadow-full">
+    <div class="Padding-20">
+        <form asp-action="Create">
+            <div class="row Padding-20">
+                <div>
+                    Write your own comment:
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model.IdMeme" id="IdMeme" class="form-control" />
+                </div>
+                <div class="form-group col-10">
+                    <input asp-for="@Model.Text" id="Text" class="form-control" />
+                </div>
+                <div class="form-group col-2">
+                    <button type="button" id="sendHub" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </form>
+        </div>
     </div>
-    <div class="form-group">
-        <input asp-for="@Model.Text" id="Text" class="form-control" />
-    </div>
-    <div class="form-group">
-        <button type="button" id="sendHub" class="btn btn-primary">Write comment</button>
-    </div>
-</form>
 <div id="CommentHubs"></div>
 
 

@@ -10,36 +10,36 @@
 <div class="center shadow-full">
     <div class="memecontainer">
         <div class="rounded item">
-            <div>Stworz Swojego Mema</div>
+            <div>Post your own meme: </div>
             <br />
                 <form asp-action="Create" enctype="multipart/form-data">
                     <div class ="row">
                     <div class="col-4">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <!--<label asp-for="Title" class="control-label"></label>-->
-                            Tytuł
+                            <label asp-for="Title" class="control-label"></label>
+                            
                             <input asp-for="Title" class="form-control" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <br />
                         <div class="form-group">
-                            <!--<label asp-for="Description" class="control-label"></label>-->
-                            Opis
+                            <label asp-for="Description" class="control-label"></label>
+                            
                             <input asp-for="Description" class="form-control" />
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                         <br />
                         <div class="form-group">
                             <!--<label asp-for="DescriptionAlt" class="control-label"></label>-->
-                            Alternatywny Opis
+                            Alt Description
                             <input asp-for="DescriptionAlt" class="form-control" />
                             <span asp-validation-for="DescriptionAlt" class="text-danger"></span>
                         </div>
                         <br/>
                         <div class="form-group">
                             <!--<label asp-for="IdCategory" class="control-label"></label>-->
-                            Wybierz Kategorię
+                            Category
                             <select asp-for="IdCategory" class ="form-control" asp-items="ViewBag.IdCategory"></select>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="row">
                             <div class="form-group">
                                 <!--<label asp-for="File" class="control-label"></label>-->
-                                Dodaj Zdjęcie
+                                Add meme
                                 <span asp-validation-for="File" class="text-danger"></span>
                                 <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
                                 <img ID="impPrev" class="rounded PictureContainer"/>
