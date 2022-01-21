@@ -1,4 +1,6 @@
 ﻿@model UserInformation
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "User Information";
@@ -49,7 +51,25 @@
                      <div class="row">
                         <p>Created Memes: @Model.IloscMemow</p>
                     </div>
-      
+      <div>
+          
+    @if (User.IsInRole(ST.AdminRole))
+    {
+                         @if(Model.dateTimeLockout==null || Model.dateTimeLockout < DateTime.Now)
+                    {
+                           <a asp-controller="Admin" asp-action="LockUser" asp-route-id="@Model.Email" asp-route-idpage="0">Block User</a>
+                    }
+                    else
+                    {
+                           <a asp-controller="Admin" asp-action="UnLockUser" asp-route-id="@Model.Email" asp-route-idpage="0">Unblock User</a>
+                    }
+    }
+                        @if (Model.dateTimeLockout == null || Model.dateTimeLockout > DateTime.Now)
+                        {
+                            <p>Account Blocked</p>                            
+                        }
+              </div>
+
                 </div>
                    <div class="col-sm-4 bordersolidgray Padding-10">
                        Observers
@@ -116,6 +136,7 @@
            <h1>Memes of </h1>
           <h1> @Model.Username</h1>
     }
+
 </div>
 
 @foreach(var meme in Model.memeViewModel.Memes)
@@ -158,9 +179,12 @@
                     </button>
                 </row>
                 <div class ="Buttons-Row">
-            <a asp-controller="Memes" asp-action="Edit" asp-route-id="@meme.IdMeme">
-                <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
-            </a>
+          @if((User.IsInRole(ST.AdminRole)) || String.Equals(@HttpContextAccessor.HttpContext.Session.GetString(ST.SessionUserName), meme.IdUser))
+                {
+                      <a asp-action="Edit" asp-route-id="@meme.IdMeme">
+                    <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
+                </a>
+                }
 
             <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
                 <img id="imageid" src="/images/icons8-comments-96.png" title="Komentarze" alt="Komentuj" class="Buttons-Medium BaseDetails">

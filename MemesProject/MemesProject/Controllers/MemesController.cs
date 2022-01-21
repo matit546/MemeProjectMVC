@@ -195,18 +195,26 @@ namespace MemesProject.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
+          
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var meme = await _context.Memes.FindAsync(id);
-           
             if (meme == null)
             {
                 return NotFound();
             }
-            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "IdCategory", meme.IdCategory);
+            var user = await _userManager.GetUserAsync(User);
+
+            if ( !User.IsInRole(ST.AdminRole) && !String.Equals(meme.IdUser, user.RealUserName))
+              {
+                return Unauthorized("You cant Edit this meme");
+            }
+
+            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "CategoryName", meme.IdCategory);
             return View(meme);
         }
 
@@ -216,19 +224,35 @@ namespace MemesProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(long id, [Bind("IdMeme,Title,Description,DescriptionAlt,File,Date,IdCategory,IdUser")] Meme meme)
+        public async Task<IActionResult> Edit(long id, [Bind("IdMeme,Title,Description,DescriptionAlt,IdCategory,IdUser")] Meme meme)
         {
             if (id != meme.IdMeme)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("File");
             if (ModelState.IsValid)
             {
+                var memeDb = await _context.Memes.FindAsync(id);
+                if(memeDb == null)
+                {
+                    return NotFound();
+                }
+                var user = await _userManager.GetUserAsync(User);
+
+                if (!User.IsInRole(ST.AdminRole) && !String.Equals(memeDb.IdUser, user.RealUserName))
+                {
+                    return Unauthorized("You cant Edit this meme");
+                }
                 try
                 {
-
-                    _context.Update(meme);
+                  
+                    memeDb.Description = meme.Description;
+                    memeDb.DescriptionAlt = meme.DescriptionAlt;
+                    memeDb.Title = meme.Title;
+                    memeDb.IdCategory = meme.IdCategory;
+                    meme.Date = DateTime.Now;
+                    _context.Update(memeDb);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -244,7 +268,7 @@ namespace MemesProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "IdCategory", meme.IdCategory);
+            ViewData["IdCategory"] = new SelectList(_context.Categories, "IdCategory", "CategoryName", meme.IdCategory);
             return View(meme);
         }
 
@@ -257,6 +281,9 @@ namespace MemesProject.Controllers
                 return NotFound();
             }
 
+         
+
+
             var meme = await _context.Memes
                 .Include(m => m.CategoryEntity)
                 .FirstOrDefaultAsync(m => m.IdMeme == id);
@@ -264,7 +291,12 @@ namespace MemesProject.Controllers
             {
                 return NotFound();
             }
+            var user = await _userManager.GetUserAsync(User);
 
+            if (!User.IsInRole(ST.AdminRole) && !String.Equals(user.RealUserName, meme.IdUser))
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(meme);
         }
 
@@ -274,7 +306,14 @@ namespace MemesProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+
             var meme = await _context.Memes.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+
+            if (!User.IsInRole(ST.AdminRole) && !String.Equals(user.RealUserName, meme.IdUser))
+            {
+                return RedirectToAction(nameof(Index));
+            }
             _context.Memes.Remove(meme);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

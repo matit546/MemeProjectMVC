@@ -68,6 +68,7 @@ namespace MemesProject.Data
                 NormalizedUserName = "Administrator",
                 PhoneNumber = "987654321",
                 AvatarImage = data.ToArray(),
+                Role= ST.AdminRole,
                 Account_Register_Date = DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString()
         }, "Haslo1!").GetAwaiter().GetResult();
 

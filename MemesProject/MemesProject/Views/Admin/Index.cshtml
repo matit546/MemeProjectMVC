@@ -1,0 +1,77 @@
+﻿@model MemesProject.Models.UserList
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<h1>@TempData["Message"]</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser[0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser[0].Email)
+            </th>
+            <th>Role</th>
+            <th>Lockout Action</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ApplicationUser)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RealUserName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                    {
+                        <a asp-action="LockUser" asp-route-id="@item.Email" asp-route-idpage="1">Block User</a>
+                    }
+                    else
+                    {
+                        <a asp-action="UnLockUser" asp-route-id="@item.Email" asp-route-idpage="1">Unblock User</a>
+                    }
+
+                </td>
+                <td>
+                    @if (!String.Equals(item.Role, ST.ModeratorRole))
+                    {
+                        <a asp-action="AddAdminRole" asp-route-id="@item.Email">Give user Moderator Role</a>
+                    }
+                    else
+                    {
+                        <a asp-action="RemoveAdminRole" asp-route-id="@item.Email">Remove User Moderator Role</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.PagingInfo.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PagingInfo.HasNextPage ? "disabled" : "";
+}
+<div class="center" style="background-color:azure">
+    <a asp-action="Index" asp-route-Page="@(Model.PagingInfo.CurrentPage - 1)" class="btn btn-info @prevDisabled "> < </a>
+    <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
+         page-class-selected="btn btn-info active" class="btn-group">
+    </div>
+    <a asp-action="Index" asp-route-Page="@(Model.PagingInfo.CurrentPage + 1)" class="btn btn-info @nextDisabled">></a>
+</div>

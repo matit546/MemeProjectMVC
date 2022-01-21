@@ -54,7 +54,7 @@ namespace MemesProject.Data
             {
                 entity.HasOne(x => x.Meme)
                 .WithMany(y => y.LikedMemes)
-               .HasForeignKey(z=> z.IdMeme);
+               .HasForeignKey(z => z.IdMeme);
             });
             builder.Entity<FavoritesMemes>(entity =>
             {
@@ -75,6 +75,8 @@ namespace MemesProject.Data
                 .WithMany(y => y.Observations)
                 .HasForeignKey(z => z.IdObservedUser);
             });
+
+            builder.Entity<ApplicationUser>().HasIndex(u => u.RealUserName).IsUnique();
         }
     }
 }

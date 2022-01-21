@@ -4,121 +4,121 @@
     ViewData["Title"] = "Edit";
 }
 
-    <div class="center-large shadow-full Padding-20">
+<div class="center-large shadow-full Padding-20">
     <div class="justify-content-center text-center">
-                    <h1>Edit your Meme</h1>
-                            <hr />
-    <form asp-action="Edit">
-        <div class="row">
-            <div class="col-6">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IdMeme" />
+        <h1>Edit your Meme</h1>
+        <hr />
+        <form asp-action="Edit">
+            <div class="row">
+                <div class="col-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdMeme" />
 
-                <div class="form-group row">
-                    <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Title"></label>
-                    <div class="col-6">
-                        <input asp-for="Title" class="form-control" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
+                    <div class="form-group row">
+                        <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Title"></label>
+                        <div class="col-6">
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
 
-                <br/>
+                    <br />
 
-                <div class="form-group row">
-                    <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Description"></label>
-                    <div class="col-6">
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                    <div class="form-group row">
+                        <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Description"></label>
+                        <div class="col-6">
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
 
-                <br/>
+                    <br />
 
-                <div class="form-group row">
-                    <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="DescriptionAlt"></label>
-                    <div class="col-6">
-                        <input asp-for="DescriptionAlt" class="form-control" />
-                        <span asp-validation-for="DescriptionAlt" class="text-danger"></span>
+                    <div class="form-group row">
+                        <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="DescriptionAlt"></label>
+                        <div class="col-6">
+                            <input asp-for="DescriptionAlt" class="form-control" />
+                            <span asp-validation-for="DescriptionAlt" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
 
-                <br/>
+                    <br />
 
-                 <div class="form-group row">
-                    <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="IdCategory"></label>
-                    <div class="col-6">
-                        <select asp-for="IdCategory" class="form-control" asp-items="ViewBag.IdCategory"></select>
-                        <span asp-validation-for="IdCategory" class="text-danger"></span>
+                    <div class="form-group row">
+                        <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="IdCategory"></label>
+                        <div class="col-6">
+                            <select asp-for="IdCategory" class="form-control" asp-items="ViewBag.IdCategory"></select>
+                            <span asp-validation-for="IdCategory" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
 
 
-@*                <div class="form-group row">
-                    <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Date"></label>
-                    <div class="col-6">
+                    @*                <div class="form-group row">
+                        <label class="offset-2 col-sm-4 col-form-label text-left" asp-for="Date"></label>
+                        <div class="col-6">
                         <input asp-for="Date" class="form-control" />
                         <span asp-validation-for="Date" class="text-danger"></span>
-                    </div>
-                </div>*@
-            </div>
-            <div class="col-6">
-                @*<div class="form-group row">
-                    <label class="col-sm-4 col-form-label text-left" asp-for="Likes"></label>
-                    <div class="col-6">
+                        </div>
+                        </div>*@
+                </div>
+                <div class="col-6">
+                    @*<div class="form-group row">
+                        <label class="col-sm-4 col-form-label text-left" asp-for="Likes"></label>
+                        <div class="col-6">
                         <input asp-for="Likes" class="form-control" />
                         <span asp-validation-for="Likes" class="text-danger"></span>
-                    </div>
-                </div>
+                        </div>
+                        </div>
 
-                <br/>
+                        <br/>
 
 
-                <div class="form-group form-check">
-                    <label class="form-check-label">
+                        <div class="form-group form-check">
+                        <label class="form-check-label">
                         <input class="form-check-input" asp-for="IfBlocked" /> @Html.DisplayNameFor(model => model.IfBlocked)
-                    </label>
-                </div>
+                        </label>
+                        </div>
 
-                <div class="form-group form-check">
-                    <label class="form-check-label">
+                        <div class="form-group form-check">
+                        <label class="form-check-label">
                         <input class="form-check-input" asp-for="IfApproved" /> @Html.DisplayNameFor(model => model.IfApproved)
-                    </label>
-                </div>*@
+                        </label>
+                        </div>*@
 
-@*                <br/>
+                    @*                <br/>
 
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label text-left" asp-for="IdUser"></label>
-                    <div class="col-6">
+                        <div class="form-group row">
+                        <label class="col-sm-4 col-form-label text-left" asp-for="IdUser"></label>
+                        <div class="col-6">
                         <input asp-for="IdUser" class="form-control" />
                         <span asp-validation-for="IdUser" class="text-danger"></span>
+                        </div>
+                        </div>
+                    *@
+
+                    <div class="form-group row">
+
+                        <div class="col-6 Margin-LR50">
+
+                            @{
+                                string base64 = Convert.ToBase64String(Model.File);
+                                string imagesrc = "data:image/png;base64," + base64;
+                            }
+                            <img src="@imagesrc" ID="impPrev" class=" rounded PictureContainer" alt="@Model.Description">
+
+
+                        </div>
                     </div>
-                </div>
-*@
 
-                <div class="form-group row">
-                    <label asp-for="File"></label>
-                    <div class="col-6 Margin-LR50">
-                      <span asp-validation-for="File" class="text-danger"></span>
-                      @{
-                        string base64 = Convert.ToBase64String(Model.File);
-                        string imagesrc = "data:image/png;base64," + base64; 
-                    }
-                    <img src="@imagesrc" ID="impPrev" class=" rounded PictureContainer"  alt="@Model.Description">
-                                <input name="file" type="file" onchange="ShowPreview(this)" class="btn btn-primary" />
-                                
-                    </div>
+
                 </div>
 
-
-            </div>
-                
                 <div class="Padding-TB10">
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </div>
-            </div> 
+            </div>
         </form>
     </div>
 </div>
@@ -127,5 +127,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

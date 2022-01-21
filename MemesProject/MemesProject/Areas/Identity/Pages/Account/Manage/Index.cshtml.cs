@@ -114,14 +114,22 @@ namespace MemesProject.Areas.Identity.Pages.Account.Manage
                     user.AvatarImage = ImageChanger.ImageToBytes(Input.AvatarImage).ToArray();
                     HttpContext.Session.Remove(ST.SessionImageAvatar);
                 }
+                try
+                {
 
-                user.RealUserName = Username;
-                _db.Users.Update(user);
-                await _db.SaveChangesAsync();
-                await _signInManager.RefreshSignInAsync(user);
-                StatusMessage = "Your profile has been updated";
-                HttpContext.Session.Remove(ST.SessionUserName);
-                return RedirectToPage();
+
+                    user.RealUserName = Username;
+                    _db.Users.Update(user);
+                    await _db.SaveChangesAsync();
+                    await _signInManager.RefreshSignInAsync(user);
+                    StatusMessage = "Your profile has been updated";
+                    HttpContext.Session.Remove(ST.SessionUserName);
+                    return RedirectToPage();
+                }catch(Exception ex)
+                {
+                    StatusMessage = "This User Name is already taken";
+                    return RedirectToPage();
+                }
             }
 
             if (Input.AvatarImage != null)

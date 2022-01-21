@@ -1,6 +1,8 @@
 ﻿@model MemesProject.Models.ViewModels.MemeViewModel
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Index";
 }
@@ -15,73 +17,108 @@
         <br />
     </div>
 </p>
-@foreach(var meme in Model.Memes)
-    {
+@foreach (var meme in Model.Memes)
+{
     <div class="center shadow-full">
         <div class="memecontainer">
             <div class="rounded item">
                 <div class="memetitle"> @meme.Title </div>
-                @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
-                <a asp-action="Details" asp-route-id="@meme.IdMeme">
-                    @{
-                        string base64 = Convert.ToBase64String(meme.File);
-                        string imagesrc = "data:image/png;base64," + base64; 
-                    }
-                    <img src="@imagesrc" class="imgmiddle" alt="@meme.DescriptionAlt">
-                </a>
-                <div class="buttons">
-                    <button class="transbutton">
-                   
-                        @if(meme.IsFavourited)
+                <div class="Buttons-Row">
+
+
+
+                    @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
+
+                    @if (User.IsInRole(ST.AdminRole))
+                    {
+                        @if (!meme.IfBlocked.Value)
                         {
-                              <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage" title="Remove an image from Favourites" alt="Dodaj do ulubionych">
+
+                            <a id="@meme.IdMeme" class="btn btn-danger BlockMeme">Block Meme</a>
+
+
                         }
                         else
                         {
-                              <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage" title="Add an image to Favourites" alt="Dodaj do ulubionych">
+                            <a id="@meme.IdMeme" class="btn btn-danger UnBlockMeme">UnBlock Meme</a>
                         }
-                  
+                    }
+                </div>
+
+                @if (!meme.IfBlocked.Value)
+                {
+                    <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                        @{
+                            string base64 = Convert.ToBase64String(meme.File);
+                            string imagesrc = "data:image/png;base64," + base64;
+                        }
+                        <img src="@imagesrc" class="imgmiddle" alt="@meme.DescriptionAlt">
+
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                        <img src="~/images/blockedImage.png" class="imgmiddle" alt="Image is Blocked">
+                    </a>
+                }
+
+                <div class="buttons">
+                    <button class="transbutton">
+
+                        @if (meme.IsFavourited)
+                        {
+                            <img src="/images/heart.png" id="@meme.IdMeme" class="UnLikeImage" alt="Remove an image from Favourites">
+                        }
+                        else
+                        {
+                            <img src="/images/heartEmpty.png" id="@meme.IdMeme" class="likeImage"  alt="Add an image to Favourites">
+                        }
+
                     </button>
                     <button class="transbutton">
-                         @if(meme.IsLiked)
-                                        {
-                                <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" title="Unlike Image"   alt="Polub">
-                                        }
-                                        else
-                                        {
-                                             <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" title="Like Image"   alt="Polub">
+                        @if (meme.IsLiked)
+                        {
+                            <img src="/images/likeFull.png" id="@meme.IdMeme" class="UnfavouriteImage" alt="Unlike Image" >
                         }
-                     <div id="numberLike @meme.IdMeme">@meme.Likes</div>      
+                        else
+                        {
+                            <img src="/images/like.png" id="@meme.IdMeme" class="favouriteImage" alt="Like Image">
+                        }
+                        <div id="numberLike @meme.IdMeme">@meme.Likes</div>
                     </button>
                 </div>
             </div>
-            <div class ="Buttons-Row">
-            <a asp-action="Edit" asp-route-id="@meme.IdMeme">
-                <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
-            </a>
+            <div class="Buttons-Row">
+                @if((User.IsInRole(ST.AdminRole)) || String.Equals(@HttpContextAccessor.HttpContext.Session.GetString(ST.SessionUserName), meme.IdUser))
+                {
+                      <a asp-action="Edit" asp-route-id="@meme.IdMeme">
+                    <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
+                </a>
+                }
 
-            <a asp-action="Details" asp-route-id="@meme.IdMeme">
-                <img id="imageid" src="/images/icons8-comments-96.png" title="Komentarze" alt="Komentuj" class="Buttons-Medium BaseDetails">
-            </a>
-   
-            <a asp-action="Delete" asp-route-id="@meme.IdMeme">
-                <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
-            </a>
+                <a asp-action="Details" asp-route-id="@meme.IdMeme">
+                    <img id="imageid" src="/images/icons8-comments-96.png" title="Komentarze" alt="Komentuj" class="Buttons-Medium BaseDetails">
+                </a>
+
+                <a asp-action="Delete" asp-route-id="@meme.IdMeme">
+                    <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
+                </a>
             </div>
         </div>
     </div>
-    }
-    @{
-        var prevDisabled = !Model.PagingInfo.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.PagingInfo.HasNextPage ? "disabled" : "";
-    }
-    <div class="center" style="background-color:azure">
-      <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage - 1)"  class="btn btn-info @prevDisabled "> < </a>
-       <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
-                 page-class-selected="btn btn-info active" class="btn-group">
-            </div> 
-    <a asp-action="Index"  asp-route-Page="@(Model.PagingInfo.CurrentPage + 1)"  class="btn btn-info @nextDisabled">></a>
-        </div>
+}
+@{
+    var prevDisabled = !Model.PagingInfo.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PagingInfo.HasNextPage ? "disabled" : "";
+}
+<div class="center" style="background-color:azure">
+    <a asp-action="Index" asp-route-Page="@(Model.PagingInfo.CurrentPage - 1)" class="btn btn-info @prevDisabled "> < </a>
+    <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border" page-class-normal="btn btn-light"
+         page-class-selected="btn btn-info active" class="btn-group">
+    </div>
+    <a asp-action="Index" asp-route-Page="@(Model.PagingInfo.CurrentPage + 1)" class="btn btn-info @nextDisabled">></a>
+</div>
 
 @section Scripts {
 

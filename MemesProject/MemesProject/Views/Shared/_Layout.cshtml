@@ -14,16 +14,14 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand ChangeColorDiv" asp-area="" asp-controller="Home" asp-action="Index">MemesProject</a>
+                <a class="navbar-brand ChangeColorDiv" asp-area="" asp-controller="Memes" asp-action="Index">Home Page</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                      
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
@@ -31,6 +29,9 @@
                         {
                                 <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Category</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Users List</a>
                         </li>
                         }
                    
@@ -201,11 +202,11 @@
                 {
                     if( $img.hasClass('setblackyelow'))
                     {
-                        $img.attr('src', '/images/heartyellow.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                        $img.attr('src', '/images/heartyellow.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('alt').attr('alt','Remove an image from Favourites.');
                     }
                     else
                     {
-                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('title').attr('title','Remove an image from Favourites');
+                        $img.attr('src', '/images/heart.png').removeClass("likeImage").addClass("UnLikeImage").removeAttr('alt').attr('alt','Remove an image from Favourites.');
                     }
                 }
                 else
@@ -213,11 +214,11 @@
 
                     if( $img.hasClass('setblackyelow'))
                     {
-                        $img.attr('src', '/images/heartEmptyyellow.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
+                        $img.attr('src', '/images/heartEmptyyellow.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('alt').attr('alt','Add an image to Favourites.');
                     }
                     else
                     {
-                        $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('title').attr('title','Add an image to Favourites');
+                        $img.attr('src', '/images/heartEmpty.png').removeClass("UnLikeImage").addClass("likeImage").removeAttr('alt').attr('alt','Add an image to Favourites.');
                     }
                 }
                 } else {  
@@ -253,11 +254,11 @@
                 if($img.hasClass('favouriteImage')){
                          if( $img.hasClass('setblackyelow'))
                          {
-                             $img.attr('src', '/images/likeyellowFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                             $img.attr('src', '/images/likeyellowFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('alt').attr('alt','UnLike Image.');
                          }
                          else
                          {
-                             $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('title').attr('title','UnLike Image');
+                             $img.attr('src', '/images/likeFull.png').removeClass("favouriteImage").addClass("UnfavouriteImage").removeAttr('alt').attr('alt','UnLike Image.');
                          }
                          var $numberofLikes = $("[id='numberLike "+memeId+"']");
                          var likes = $numberofLikes.text();
@@ -267,11 +268,11 @@
                 }else{
                          if( $img.hasClass('setblackyelow'))
                          {
-                             $img.attr('src', '/images/likeyellow.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                             $img.attr('src', '/images/likeyellow.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('alt').attr('alt','Like Image.');
                          }
                          else
                          {
-                             $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('title').attr('title','Like Image');
+                             $img.attr('src', '/images/like.png').removeClass("UnfavouriteImage").addClass("favouriteImage").removeAttr('alt').attr('alt','Like Image.');
                        
                          }
                           var $numberofLikes = $("[id='numberLike "+memeId+"']");
@@ -303,6 +304,63 @@
                 $(Par).find(".addCommentBtn").prop('disabled', false);
             }
     }
+   </script>
+   <script>
+    $(document).ready(function(){
+  $(".BlockMeme").click(function(){
+    
+   var $img = $(this);
+   var memeId = $img.attr("id");
+         $.ajax({  
+                url: "/Admin/BlockMeme?id="+memeId,  
+                type:"GET", 
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) { 
+                 
+                           location.reload(true);
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                } 
+            });
+    
+      });
+    });
+
+    
+   </script>
+      <script>
+    $(document).ready(function(){
+  $(".UnBlockMeme").click(function(){
+
+   var $img = $(this);
+   var memeId = $img.attr("id");
+         $.ajax({  
+                url: "/Admin/UnBlockMeme?id="+memeId,  
+                type:"GET", 
+                contentType: "application/json; charset=utf-8",  
+                dataType: "text",  
+                success: function(response) {  
+
+                   location.reload(true);
+                       
+                },  
+                failure: function(response) {  
+                    
+                },  
+                error: function(response) {  
+            
+                } 
+            });
+    
+      });
+    });
+
+    
    </script>
 
     @await RenderSectionAsync("Scripts", required: false)

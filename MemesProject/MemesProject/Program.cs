@@ -1,6 +1,8 @@
 using MemesProject.Data;
+using MemesProject.Helpers;
 using MemesProject.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -20,6 +22,7 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
@@ -55,7 +58,7 @@ app.MapControllerRoute(name: "UserInformation",
               defaults: new { controller = "User", action = "GetUserInformation"});
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Memes}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

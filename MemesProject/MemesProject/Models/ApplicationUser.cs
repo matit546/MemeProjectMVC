@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,11 @@ namespace MemesProject.Models
     {
         public byte[] AvatarImage { get; set; }
         public string Account_Register_Date { get; set; }
+
+      
         public string RealUserName { get; set; }
 
+        public string Role { get; set; }
         public virtual ICollection<Observation> Observations { get; set; }
         // zeby nie psuc loginu i rejestracji
         //public ICollection<Meme> MemesCollection { get; set; }

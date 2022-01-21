@@ -11,6 +11,8 @@ namespace MemesProject.Models
         public string AccountRegisterDate { get; set; }
         public int IloscMemow { get; set; }
 
+        public DateTimeOffset? dateTimeLockout { get; set; }
+
         public int IloscKomentarzy { get; set; }
         public bool isObserved { get; set; }
 

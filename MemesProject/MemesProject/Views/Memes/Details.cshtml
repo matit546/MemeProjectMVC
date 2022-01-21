@@ -1,6 +1,7 @@
 ﻿@model MemesProject.Models.Meme
 @using MemesProject.Models.ViewModels;
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
 }
@@ -11,60 +12,100 @@
         <div class="memecontainer">
             <div class="rounded item">
                 <div class="memetitle"> @Html.DisplayFor(model => model.Title) </div>
-                @Html.ActionLink(Model.IdUser,"GetUserInformation","User",new { id = Model.IdUser })
-                @{
-                    string base64 = Convert.ToBase64String(Model.File);
-                    string imagesrc = "data:image/png;base64," + base64; 
+                <div class="Buttons-Row">
+
+
+
+                    @Html.ActionLink(Model.IdUser,"GetUserInformation","User",new { id = Model.IdUser })
+
+                    @if (User.IsInRole(ST.AdminRole))
+                    {
+                        @if (!Model.IfBlocked.Value)
+                        {
+
+                            <a id="@Model.IdMeme" class="btn btn-danger BlockMeme">Block Meme</a>
+
+
+                        }
+                        else
+                        {
+                            <a id="@Model.IdMeme" class="btn btn-danger UnBlockMeme">UnBlock Meme</a>
+                        }
+                    }
+                </div>
+
+                @if (!Model.IfBlocked.Value)
+                {
+                    <a asp-action="Details" asp-route-id="@Model.IdMeme">
+                        @{
+                            string base64 = Convert.ToBase64String(Model.File);
+                            string imagesrc = "data:image/png;base64," + base64;
+                        }
+                        <img src="@imagesrc" class="imgmiddle" alt="@Model.DescriptionAlt">
+
+                    </a>
                 }
-                <img src="@imagesrc" class="imgmiddle" alt="@Html.DisplayFor(model => model.DescriptionAlt)">
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@Model.IdMeme">
+                        <img src="~/images/blockedImage.png" class="imgmiddle" alt="Image is Blocked">
+                    </a>
+                }
 
                 <row class="buttons">
                     <button class="transbutton">
-                   
-                        @if(Model.IsFavourited)
+
+                        @if (Model.IsFavourited)
                         {
-                              <img src="/images/heart.png" id="@Model.IdMeme" class="UnLikeImage"  title="Remove an image from Favourites"   alt="Dodaj do ulubionych">
+                            <img src="/images/heart.png" id="@Model.IdMeme" class="UnLikeImage" alt="Remove an image from Favourites" >
                         }
-                        else               
+                        else
                         {
-                              <img src="/images/heartEmpty.png" id="@Model.IdMeme" class="likeImage"  title="Add an image to Favourites"   alt="Dodaj do ulubionych">
+                            <img src="/images/heartEmpty.png" id="@Model.IdMeme" class="likeImage" alt="Add an image to Favourites" >
                         }
                     </button>
                     <button class="transbutton">
-                         @if(Model.IsLiked)
-                                        {
-                                <img src="/images/likeFull.png" id="@Model.IdMeme" class="UnfavouriteImage" title=Unlike Image"   alt="Polub">
-                                        }
-                                        else
-                                        {
-                                 <img src="/images/like.png" id="@Model.IdMeme" class="favouriteImage" title="Like Image"   alt="Polub">
+                        @if (Model.IsLiked)
+                        {
+                            <img src="/images/likeFull.png" id="@Model.IdMeme" class="UnfavouriteImage" alt=Unlike Image">
                         }
-                                      <div id="numberLike @Model.IdMeme">@Model.Likes</div>      
-                
+                        else
+                        {
+                            <img src="/images/like.png" id="@Model.IdMeme" class="favouriteImage" alt="Like Image" >
+                        }
+                        <div id="numberLike @Model.IdMeme">@Model.Likes</div>
+
                     </button>
                 </row>
             </div>
-             <div class ="Buttons-Row">
-            <a asp-action="Edit" asp-route-id="@Model.IdMeme">
-                <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
-            </a>
-   
-            <a asp-action="Delete" asp-route-id="@Model.IdMeme">
-                <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
-            </a>
+            <div class="Buttons-Row">
+                @if((User.IsInRole(ST.AdminRole)) || String.Equals(@HttpContextAccessor.HttpContext.Session.GetString(ST.SessionUserName), @Model.IdUser))
+                {
+                      <a asp-action="Edit" asp-route-id="@Model.IdMeme">
+                    <img id="imageid" src="/images/icons8-edit-96.png" title="Edycja" alt="Edytuj" class="Buttons-Medium BaseEdit">
+                </a>
+                }
+
+                <a asp-action="Delete" asp-route-id="@Model.IdMeme">
+                    <img id="imageid" src="/images/icons8-trash-96.png" title="Usuwanie" alt="Usuń" class="Buttons-Medium BaseDelete">
+                </a>
             </div>
         </div>
     </div>
-    <br/>
+    <br />
 
-            @{await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme=Model.IdMeme });}
-  
+    @{
+        await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme = Model.IdMeme });
+    }
+
 </div>
 
 
 @section Scripts {
-    <div hidden>
-          @{await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme=Model.IdMeme });}
-    </div>
- 
+<div hidden>
+    @{
+    await Html.RenderPartialAsync("_CommentsHubCreatePartial", new CommentViewModel { IdMeme=Model.IdMeme });
+    }
+</div>
+
 }

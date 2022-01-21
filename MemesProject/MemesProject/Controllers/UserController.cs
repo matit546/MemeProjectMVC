@@ -57,6 +57,7 @@ namespace MemesProject.Controllers
                 IloscKomentarzy= await _context.Comments.Where(u => u.IdUser == id).CountAsync(),
                 IloscMemow = await _context.Memes.Where(u => u.IdUser == id).CountAsync(),
                 Email = applicationUser.Email,
+                dateTimeLockout = applicationUser.LockoutEnd,
                 memeViewModel = new MemeViewModel
                 {
                     PagingInfo = new PagingInfo()
