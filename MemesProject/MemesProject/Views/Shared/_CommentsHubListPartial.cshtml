@@ -29,7 +29,14 @@
                         <div class="col-4">
                             @Html.DisplayFor(modelItem => comment.Date)
                         </div>
-                    </div>
+                            @if (User.IsInRole(ST.AdminRole))
+                            {
+                                <div>
+                                    <input class="displayhidden IdComment" value="@comment.IdComment"/>
+                                    <input type="button" class="btn btn-danger deleteComment" value="Delete"/>
+                                </div>
+                            }
+                        </div>
                 </div>
                 <br/>
             }
@@ -42,3 +49,23 @@
         }
     </div>
 </div>
+<script>
+    $(".deleteComment").click(function(){
+        var Par=$(this).parent();
+        var IdComment=parseInt($(Par).find(".IdComment").val());
+        //console.log(IdComment);
+        if (confirm("Are you sure you want to delete this?")) {
+            $.ajax({
+                type: 'POST',
+                url: "/Comments/DeleteComment?IdComment="+IdComment,
+                dataType: "text",
+                success: function (result){
+                    alert("Comment has been successfully deleted!");
+                },
+                error: function (error) {  
+                    alert("Error "+error+" try again later");
+                }
+            });
+        }
+    });
+</script>

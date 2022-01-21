@@ -162,5 +162,22 @@ namespace MemesProject.Controllers
                 return View();
             }
         }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(long? IdComment)
+        {
+            var comment = _context.Comments.FirstOrDefault(c => c.IdComment == IdComment);
+            comment.Text = "Comment has been deleted";
+            try
+            {
+                _context.Attach(comment);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok();
+        }
     }
 }
