@@ -52,6 +52,8 @@ namespace MemesProject.Controllers
             {
                 return NotFound();
             }
+
+
             if (String.Equals(User.Identity.Name, applicationuser.Email))
             {
                 return RedirectToAction(nameof(Index));
@@ -60,6 +62,13 @@ namespace MemesProject.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+
+            if (applicationuser.Role == ST.ModeratorRole && User.Identity.Name!= "admin@gmail.com")
+            {
+                TempData["Message"] = "You cannot do that";
+                return RedirectToAction(nameof(Index));
+            }
+
             applicationuser.LockoutEnd = DateTime.Now.AddYears(100);
             await _context.SaveChangesAsync();
             if(idpage == 1)
@@ -80,6 +89,15 @@ namespace MemesProject.Controllers
             {
                 return NotFound();
             }
+
+            if (applicationuser.Role == ST.ModeratorRole && User.Identity.Name != "admin@gmail.com")
+            {
+   
+                TempData["Message"] = "You cannot do that";
+                return RedirectToAction(nameof(Index));
+            }
+
+
             applicationuser.LockoutEnd = DateTime.Now;
             await _context.SaveChangesAsync();
             if (idpage == 1)
@@ -177,14 +195,12 @@ namespace MemesProject.Controllers
             {
                 return NotFound();
             }
+
             if (String.Equals(user.Email, "admin@gmail.com"))
             {
                 return RedirectToAction(nameof(Index));
             }
-            if (user == null)
-            {
-                return NotFound();
-            }
+
             if (String.Equals(user.Email, User.Identity.Name))
             {
                 await _userManager.RemoveFromRoleAsync(user, ST.AdminRole);
@@ -192,6 +208,7 @@ namespace MemesProject.Controllers
                 await _context.SaveChangesAsync();
                 await _signInManager.RefreshSignInAsync(user);
             }
+
 
             if (!String.Equals(User.Identity.Name, "admin@gmail.com"))
             {
