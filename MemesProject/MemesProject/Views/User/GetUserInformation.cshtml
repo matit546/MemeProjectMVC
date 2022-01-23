@@ -150,14 +150,40 @@
         <div class="memecontainer">
             <div class="rounded item">
                 <div class="memetitle"> @meme.Title </div>
+                    <div class="Buttons-Row">
                 @Html.ActionLink(meme.IdUser,"GetUserInformation","User",new { id = meme.IdUser })
-                <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
-                    @{
-                        string base641 = Convert.ToBase64String(meme.File);
-                        string imagesrc2 = "data:image/png;base64," + base641;
+
+                    @if (User.IsInRole(ST.AdminRole))
+                    {
+                        @if (!meme.IfBlocked.Value)
+                        {
+
+                            <a id="@meme.IdMeme" class="btn btn-danger BlockMeme">Block Meme</a>
+
+
+                        }
+                        else
+                        {
+                            <a id="@meme.IdMeme" class="btn btn-danger UnBlockMeme">UnBlock Meme</a>
+                        }
                     }
-                    <img src="@imagesrc2" class="imgmiddle" alt="@meme.DescriptionAlt">
+                    </div>
+                @if (!meme.IfBlocked.Value)
+                {
+                    <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
+                        @{
+                            string base641 = Convert.ToBase64String(meme.File);
+                            string imagesrc2 = "data:image/png;base64," + base641;
+                        }
+                        <img src="@imagesrc2" class="imgmiddle" alt="@meme.DescriptionAlt">
                 </a>
+                }
+                else
+                {
+                    <a asp-controller="Memes" asp-action="Details" asp-route-id="@meme.IdMeme">
+                        <img src="~/images/blockedImage.png" class="imgmiddle" alt="Image is Blocked">
+                    </a>
+                }
                 <row class="buttons">
                     <button class="transbutton">
 
