@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MemesProject</title>
+    <title>@ViewData["Title"] - BadNiceMemes</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MemesProject.styles.css" asp-append-version="true" />
@@ -297,7 +297,7 @@
     });
     function BlockButton(val){
         var Par=$(val).parent().parent();
-        if ($(val).val() == '') {
+        if ($(val).val().length < 3) {
                 $(Par).find(".addCommentBtn").prop('disabled', true);
             } 
             else {

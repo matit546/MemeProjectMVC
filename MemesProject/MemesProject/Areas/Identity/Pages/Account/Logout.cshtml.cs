@@ -32,6 +32,7 @@ namespace MemesProject.Areas.Identity.Pages.Account
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
+                returnUrl = "/Memes/Index";
                 return LocalRedirect(returnUrl);
             }
             else
